@@ -1,0 +1,1471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>TechSupport AI™ — L1 + L2 Support Command Center</title>
+  <style>
+    :root{
+      --bg0:#060716;
+      --bg1:#0b1033;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.12);
+      --stroke2: rgba(255,255,255,.18);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.55);
+      --good: #44ffb2;
+      --warn: #ffd166;
+      --bad: #ff4d6d;
+      --accent: #7c5cff;
+      --accent2:#00d4ff;
+      --accent3:#ff5cf4;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(124,92,255,.35), transparent 55%),
+                  radial-gradient(900px 700px at 85% 25%, rgba(0,212,255,.25), transparent 55%),
+                  radial-gradient(800px 900px at 60% 95%, rgba(255,92,244,.22), transparent 60%),
+                  linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* Subtle animated grain */
+    .grain{
+      position:fixed; inset:-20%;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      opacity:.25;
+      mix-blend-mode:overlay;
+      pointer-events:none;
+      animation: drift 14s linear infinite;
+      transform: translate3d(0,0,0);
+    }
+    @keyframes drift { 0%{transform:translate(-2%, -2%)} 50%{transform:translate(2%, 2%)} 100%{transform:translate(-2%, -2%)} }
+
+    a{color:inherit}
+    .container{max-width:1200px;margin:0 auto;padding:22px 18px 70px}
+    .topbar{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      position:sticky; top:0; z-index:20;
+      padding:14px 12px;
+      background: linear-gradient(180deg, rgba(6,7,22,.75), rgba(6,7,22,.35));
+      backdrop-filter: blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      min-width: 260px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background:
+        radial-gradient(16px 16px at 25% 25%, rgba(255,255,255,.9), rgba(255,255,255,0) 70%),
+        linear-gradient(135deg, rgba(124,92,255,.95), rgba(0,212,255,.85), rgba(255,92,244,.9));
+      box-shadow: 0 12px 40px rgba(124,92,255,.25), 0 12px 40px rgba(0,212,255,.18);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-60% -60%;
+      background: radial-gradient(circle, rgba(255,255,255,.25), transparent 60%);
+      transform: rotate(25deg);
+    }
+    .brand h1{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+    }
+    .brand .sub{
+      margin:2px 0 0;
+      font-size:12px;
+      color:var(--muted2);
+    }
+    .chiprow{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
+    .chip{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+      user-select:none;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--good);box-shadow:0 0 16px rgba(68,255,178,.45)}
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      box-shadow: none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      font-weight:600;
+      display:inline-flex; align-items:center; gap:10px;
+    }
+    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.10); border-color:rgba(255,255,255,.18)}
+    .btn:active{transform: translateY(0px) scale(.99)}
+    .btn.primary{
+      border-color: rgba(0,212,255,.35);
+      background: linear-gradient(135deg, rgba(124,92,255,.55), rgba(0,212,255,.35));
+      box-shadow: 0 14px 40px rgba(0,212,255,.14), 0 14px 40px rgba(124,92,255,.12);
+    }
+    .btn.danger{
+      border-color: rgba(255,77,109,.35);
+      background: linear-gradient(135deg, rgba(255,77,109,.30), rgba(255,209,102,.14));
+    }
+    .btn.small{padding:8px 10px; border-radius:11px; font-size:12px}
+    .btn.ghost{background:transparent}
+    .rightbar{display:flex; gap:10px; align-items:center; justify-content:flex-end; min-width:260px}
+
+    /* HERO */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      padding:18px 0 14px;
+      align-items:stretch;
+    }
+    .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .panel:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(420px 220px at 20% 10%, rgba(124,92,255,.22), transparent 60%),
+                  radial-gradient(420px 260px at 80% 30%, rgba(0,212,255,.18), transparent 65%),
+                  radial-gradient(600px 260px at 60% 95%, rgba(255,92,244,.12), transparent 70%);
+      pointer-events:none;
+    }
+    .panel > *{position:relative}
+    .heroLeft{padding:22px 22px 18px}
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);
+      font-size:12px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.85);
+      margin-bottom:12px;
+    }
+    .heroTitle{
+      margin:0 0 10px;
+      font-size:42px;
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .heroTitle span{
+      background: linear-gradient(90deg, rgba(124,92,255,1), rgba(0,212,255,1), rgba(255,92,244,1));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .heroDesc{
+      margin:0 0 16px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+      max-width: 60ch;
+    }
+    .heroCtas{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .mini{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:16px
+    }
+    .pill{
+      background:rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 999px;
+      padding:10px 12px;
+      display:flex; gap:10px; align-items:center;
+      font-size:12px; color:rgba(255,255,255,.82);
+    }
+    .pill b{font-family:var(--mono); font-weight:700; color:rgba(255,255,255,.92)}
+    .heroRight{
+      display:grid;
+      grid-template-rows: 1fr auto;
+      min-height: 260px;
+    }
+    .imageCard{
+      height:100%;
+      min-height: 280px;
+      position:relative;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .imageCard .img{
+      position:absolute; inset:0;
+      background:
+        linear-gradient(135deg, rgba(6,7,22,.50), rgba(6,7,22,.10)),
+        url("https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=1400&q=70");
+      background-size:cover;
+      background-position:center;
+      filter:saturate(1.15) contrast(1.08);
+      transform: scale(1.02);
+    }
+    .imageCard .badge{
+      position:absolute; left:16px; top:16px;
+      background:rgba(0,0,0,.30);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:10px 12px;
+      display:flex; gap:8px; align-items:center;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      font-size:12px;
+      color:rgba(255,255,255,.86);
+    }
+    .imageCard .badge .mic{
+      width:28px;height:28px;border-radius:10px;
+      background: linear-gradient(135deg, rgba(124,92,255,.75), rgba(0,212,255,.45));
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .imageCard .caption{
+      position:absolute; left:16px; right:16px; bottom:16px;
+      background:rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:16px;
+      padding:12px 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      color:rgba(255,255,255,.88);
+    }
+    .caption .row{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap}
+    .caption .row b{font-size:12px; letter-spacing:.08em; text-transform:uppercase}
+    .caption .row span{font-size:12px; color:rgba(255,255,255,.70)}
+    .caption .small{
+      margin-top:8px;
+      font-size:12px;
+      color:rgba(255,255,255,.72);
+      line-height:1.35;
+    }
+
+    .quickStats{
+      padding:14px 16px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      background: rgba(0,0,0,.14);
+    }
+    .stat{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding:12px;
+      min-height:78px;
+    }
+    .stat .k{font-size:11px; color:rgba(255,255,255,.65); letter-spacing:.08em; text-transform:uppercase}
+    .stat .v{margin-top:6px; font-size:18px; font-weight:800}
+    .stat .h{margin-top:2px; font-size:12px; color:rgba(255,255,255,.68)}
+
+    /* GRID */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:16px;
+      margin-top: 16px;
+    }
+    .card{
+      background: rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:14px 14px 12px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      background: rgba(0,0,0,.14);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .cardHeader h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.86);
+    }
+    .cardHeader p{
+      margin:6px 0 0;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.4;
+      max-width: 70ch;
+    }
+    .cardBody{padding:14px}
+    .row{
+      display:flex; gap:12px; flex-wrap:wrap;
+    }
+    .field{
+      display:flex; flex-direction:column; gap:6px;
+      flex: 1 1 220px;
+      min-width: 200px;
+    }
+    label{
+      font-size:11px; color:rgba(255,255,255,.70);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    input, select, textarea{
+      width:100%;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(255,255,255,.92);
+      border-radius: 14px;
+      padding:11px 12px;
+      outline:none;
+      font-size:13px;
+      transition: border-color .12s ease, background .12s ease;
+    }
+    textarea{min-height: 96px; resize: vertical}
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(0,212,255,.40);
+      background: rgba(0,0,0,.22);
+    }
+    .hint{
+      font-size:12px;
+      color:rgba(255,255,255,.58);
+      line-height:1.35;
+    }
+
+    /* Tabs */
+    .tabs{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .tab{
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+      transition: all .12s ease;
+      user-select:none;
+      display:flex; align-items:center; gap:8px;
+    }
+    .tab.active{
+      background: linear-gradient(135deg, rgba(124,92,255,.40), rgba(0,212,255,.22));
+      border-color: rgba(0,212,255,.35);
+      color: rgba(255,255,255,.92);
+      transform: translateY(-1px);
+    }
+    .tab .tag{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      color: rgba(255,255,255,.75);
+    }
+
+    /* Timeline */
+    .timeline{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .event{
+      display:flex; gap:10px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      border-radius: 16px;
+      padding:10px 10px;
+      align-items:flex-start;
+    }
+    .badgeIcon{
+      width:34px;height:34px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(124,92,255,.38), rgba(0,212,255,.18));
+      flex:0 0 auto;
+    }
+    .event .meta{flex:1 1 auto}
+    .event .meta .top{display:flex; justify-content:space-between; gap:10px}
+    .event .meta .title{font-weight:900; font-size:13px}
+    .event .meta .time{font-family:var(--mono); font-size:11px; color:rgba(255,255,255,.60)}
+    .event .meta .desc{margin-top:4px; font-size:12px; color:rgba(255,255,255,.70); line-height:1.35}
+
+    /* Confidence meter */
+    .meter{
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      background: rgba(0,0,0,.12);
+      padding:12px;
+    }
+    .meterTop{display:flex; justify-content:space-between; gap:10px; align-items:center}
+    .meterTop b{font-size:12px; letter-spacing:.10em; text-transform:uppercase; color:rgba(255,255,255,.85)}
+    .meterTop span{font-family:var(--mono); font-size:12px; color:rgba(255,255,255,.75)}
+    .bar{
+      margin-top:10px;
+      height:10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .fill{
+      height:100%;
+      width:58%;
+      background: linear-gradient(90deg, rgba(255,209,102,.85), rgba(68,255,178,.85));
+      border-radius: 999px;
+      box-shadow: 0 0 20px rgba(68,255,178,.22);
+      transition: width .25s ease;
+    }
+    .meterHint{margin-top:8px; font-size:12px; color:rgba(255,255,255,.62); line-height:1.35}
+
+    /* Steps */
+    .steps{display:flex; flex-direction:column; gap:8px}
+    .step{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+      border-radius: 16px;
+      padding:10px 10px;
+      display:flex; gap:10px; align-items:flex-start;
+    }
+    .check{
+      width:18px;height:18px;border-radius:6px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      margin-top:2px;
+      flex:0 0 auto;
+      display:grid; place-items:center;
+      color:rgba(255,255,255,.85);
+      font-size:12px;
+    }
+    .step.done .check{
+      background: rgba(68,255,178,.18);
+      border-color: rgba(68,255,178,.35);
+      box-shadow: 0 0 18px rgba(68,255,178,.20);
+    }
+    .step .txt{flex:1 1 auto}
+    .step .txt b{display:block; font-size:12px}
+    .step .txt span{display:block; margin-top:3px; font-size:12px; color:rgba(255,255,255,.66); line-height:1.35}
+
+    /* Vision */
+    .visionWrap{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    .visionBox{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      border-radius: 18px;
+      overflow:hidden;
+      min-height: 220px;
+      position:relative;
+    }
+    video{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      background: rgba(0,0,0,.45);
+      display:block;
+    }
+    .visionOverlay{
+      position:absolute; left:10px; right:10px; bottom:10px;
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 16px;
+      padding:10px 10px;
+      backdrop-filter: blur(10px);
+    }
+    .visionOverlay .left{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      color:rgba(255,255,255,.82);
+      font-size:12px;
+    }
+    .visionOverlay .right{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .kbd{
+      font-family:var(--mono);
+      font-size:11px;
+      padding:4px 8px;
+      border-radius: 10px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color:rgba(255,255,255,.78);
+    }
+
+    .callout{
+      border:1px dashed rgba(255,255,255,.18);
+      background: rgba(0,0,0,.12);
+      border-radius: 18px;
+      padding:12px;
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+
+    .footer{
+      margin-top: 16px;
+      text-align:center;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+    }
+    .footer b{color:rgba(255,255,255,.75)}
+    .rtl{direction:rtl; unicode-bidi:embed;}
+    .rtl input, .rtl textarea, .rtl select{direction:rtl;}
+    .rtl .tabs, .rtl .row, .rtl .chiprow, .rtl .heroCtas{direction:rtl;}
+    .rtl .event .meta .top{flex-direction:row-reverse;}
+    .rtl .visionOverlay{flex-direction:row-reverse;}
+    .rtl .brand{direction:ltr;} /* keep logo alignment nice */
+
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .visionWrap{grid-template-columns:1fr}
+      .twoCol{grid-template-columns:1fr}
+      .brand{min-width:auto}
+      .rightbar{min-width:auto}
+      .heroTitle{font-size:34px}
+      .quickStats{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 520px){
+      .quickStats{grid-template-columns:1fr}
+      .heroTitle{font-size:30px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>TechSupport AI™</h1>
+        <div class="sub">One product • Level 1 included • Level 2 (VisionScreen™) escalation</div>
+      </div>
+    </div>
+
+    <div class="chiprow" role="list" aria-label="Integrations">
+      <div class="chip" role="listitem"><span class="dot"></span> Twilio Voice</div>
+      <div class="chip" role="listitem">SMS + Email</div>
+      <div class="chip" role="listitem">Firebase (Firestore)</div>
+      <div class="chip" role="listitem">Multilingual</div>
+      <div class="chip" role="listitem">Concurrent Calls</div>
+    </div>
+
+    <div class="rightbar">
+      <button class="btn small ghost" id="btnReset" title="Reset demo state">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12a9 9 0 1 1-3-6.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 3v7h-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Reset
+      </button>
+      <button class="btn small primary" id="btnNewCase" title="Create a new support case">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        New Case
+      </button>
+    </div>
+  </div>
+
+  <div class="container" id="appRoot">
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero">
+      <div class="panel heroLeft">
+        <div class="kicker">
+          <span class="dot"></span>
+          <span>Invention • 12/15/2025 • Live Call Magic</span>
+        </div>
+
+        <h2 class="heroTitle">
+          Call a Twilio number and the <span>magic starts</span>.
+        </h2>
+
+        <p class="heroDesc">
+          TechSupport AI™ answers support calls as a Level 1 agent, triages and resolves common issues, and builds a complete case file in Firebase.
+          If the problem can’t be solved fast, TechSupport AI-2™ escalates seamlessly and activates <b>VisionScreen™</b> (Level 2 only) to guide the caller
+          step-by-step using screen share or camera-to-screen—just like live video guidance.
+        </p>
+
+        <div class="heroCtas">
+          <button class="btn primary" id="btnSimCall">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.9v3a2 2 0 0 1-2.2 2c-3.2-.3-6.3-1.4-9-3.2a21.6 21.6 0 0 1-6.6-6.6C2.4 9.4 1.3 6.3 1 3.1A2 2 0 0 1 3 1h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7 8.9a16 16 0 0 0 6.6 6.6l1.4-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6A2 2 0 0 1 22 16.9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Simulate Incoming Call
+          </button>
+
+          <button class="btn" id="btnEscalate">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 7l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Promote to Level 2
+          </button>
+
+          <button class="btn danger" id="btnHuman">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 21v-2a4 4 0 0 0-3-3.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 21v-2a4 4 0 0 1 3-3.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2"/></svg>
+            Escalate to Human
+          </button>
+        </div>
+
+        <div class="mini" aria-label="Highlights">
+          <div class="pill"><b>L1</b> triage + safe fixes + case file</div>
+          <div class="pill"><b>L2</b> VisionScreen™ guided resolution</div>
+          <div class="pill"><b>6</b> languages + multiple calls</div>
+          <div class="pill"><b>SMS</b> session link + recap</div>
+          <div class="pill"><b>Email</b> resolution packet</div>
+          <div class="pill"><b>Firebase</b> timelines + artifacts</div>
+        </div>
+      </div>
+
+      <div class="panel heroRight">
+        <div class="imageCard" aria-label="Tech support imagery">
+          <div class="img" aria-hidden="true"></div>
+          <div class="badge">
+            <div class="mic" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Z" stroke="white" stroke-width="2"/>
+                <path d="M19 11a7 7 0 0 1-14 0" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18v3" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 21h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-weight:900">Voice-First Support</div>
+              <div style="color:rgba(255,255,255,.70); font-size:12px;">Twilio call → L1 → L2 VisionScreen™</div>
+            </div>
+          </div>
+
+          <div class="caption">
+            <div class="row">
+              <b>Live Guide Mode</b>
+              <span>Screen Share preferred • Camera fallback</span>
+            </div>
+            <div class="small">
+              Caller stays on the phone while TechSupport AI-2™ sends a secure SMS link to start a live session.
+              The agent guides step-by-step and confirms progress visually.
+            </div>
+          </div>
+        </div>
+
+        <div class="quickStats" aria-label="Quick stats">
+          <div class="stat">
+            <div class="k">Languages</div>
+            <div class="v">EN • FR • DE</div>
+            <div class="h">IT • 中文 • فارسی</div>
+          </div>
+          <div class="stat">
+            <div class="k">Concurrency</div>
+            <div class="v" id="statCalls">0</div>
+            <div class="h">Active calls (demo)</div>
+          </div>
+          <div class="stat">
+            <div class="k">Mode</div>
+            <div class="v" id="statMode">L1</div>
+            <div class="h">Auto-promote to L2</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN GRID -->
+    <section class="grid" aria-label="Main content">
+      <!-- LEFT: Case Intake + Playbooks -->
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Case Intake</h2>
+            <p>Simulate what TechSupport AI™ collects on a call: product, category, language, severity, and the caller’s exact problem.</p>
+          </div>
+          <div class="tabs" aria-label="Support Levels">
+            <div class="tab active" data-tab="l1" id="tabL1">
+              Level 1 <span class="tag">TechSupport AI™</span>
+            </div>
+            <div class="tab" data-tab="l2" id="tabL2">
+              Level 2 <span class="tag">TechSupport AI-2™</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cardBody">
+          <div class="row">
+            <div class="field">
+              <label for="product">Product</label>
+              <select id="product">
+                <option value="AI Factory (General)">AI Factory (General)</option>
+                <option value="AffiliateLedger AI™">AffiliateLedger AI™</option>
+                <option value="VisionWing™">VisionWing™</option>
+                <option value="RecallIQ™">RecallIQ™</option>
+                <option value="SmartRank AI">SmartRank AI</option>
+                <option value="Single-File SaaS™">Single-File SaaS™</option>
+              </select>
+              <div class="hint">In production, this can be recognized by phone tree, caller ID, or account lookup.</div>
+            </div>
+
+            <div class="field">
+              <label for="language">Call Language</label>
+              <select id="language">
+                <option value="en" selected>English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="zh">中文 (Mandarin)</option>
+                <option value="fa">فارسی (Farsi)</option>
+              </select>
+              <div class="hint">Auto-detect first, then confirm. Lock language for the whole session.</div>
+            </div>
+
+            <div class="field">
+              <label for="severity">Severity</label>
+              <select id="severity">
+                <option value="Low">Low — question / how-to</option>
+                <option value="Medium" selected>Medium — workflow blocked</option>
+                <option value="High">High — payments/auth down</option>
+                <option value="Critical">Critical — security / data loss risk</option>
+              </select>
+              <div class="hint">High/Critical can auto-promote to Level 2 and generate escalation packets faster.</div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div class="field">
+              <label for="category">Issue Category</label>
+              <select id="category">
+                <option value="Login & Access" selected>Login & Access</option>
+                <option value="Billing & Subscription">Billing & Subscription</option>
+                <option value="API Keys & Auth">API Keys & Auth</option>
+                <option value="Integrations (Twilio/Stripe/etc.)">Integrations (Twilio/Stripe/etc.)</option>
+                <option value="Uploads & Files">Uploads & Files</option>
+                <option value="Performance & Errors">Performance & Errors</option>
+                <option value="Affiliate Tracking & Commission">Affiliate Tracking & Commission</option>
+              </select>
+              <div class="hint">This drives the playbook checklist and recommended “safe actions.”</div>
+            </div>
+
+            <div class="field">
+              <label for="contact">Caller Contact</label>
+              <input id="contact" placeholder="Email or phone (for recap + session link)" value="+1 (___) ___-____" />
+              <div class="hint">The agent can send SMS session links and email resolution summaries automatically.</div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div class="field" style="flex:1 1 100%">
+              <label for="problem">Caller’s Problem (verbatim)</label>
+              <textarea id="problem" placeholder="Example: 'I’m trying to connect Twilio but it keeps saying webhook validation failed…'"></textarea>
+              <div class="hint">Exact error text helps L1 resolve quickly. If unclear → promote to L2 VisionScreen™.</div>
+            </div>
+          </div>
+
+          <div class="twoCol" style="margin-top:12px">
+            <div class="meter">
+              <div class="meterTop">
+                <b>Resolution Confidence</b>
+                <span id="confPct">58%</span>
+              </div>
+              <div class="bar"><div class="fill" id="confFill"></div></div>
+              <div class="meterHint" id="confHint">
+                Confidence is a guide, not a guarantee. When low, TechSupport AI™ should ask clarifying questions or promote to Level 2.
+              </div>
+            </div>
+
+            <div class="callout" id="privacyBox">
+              <b style="display:block; margin-bottom:6px; color:rgba(255,255,255,.9)">Privacy & Consent Defaults</b>
+              • VisionScreen™ is <b>L2 only</b> and always opt-in.<br/>
+              • Recording is opt-in, with clear prompts.<br/>
+              • Sensitive fields (API keys, cards) must be redacted or avoided in storage.<br/>
+              • Every action is logged to Firebase for audit.
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px; align-items:center; justify-content:space-between">
+            <div class="row">
+              <button class="btn primary" id="btnGenerateSteps">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Build L1 Playbook
+              </button>
+              <button class="btn" id="btnSendLink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M22 2l-7 20-4-9-9-4 20-7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Send SMS Session Link
+              </button>
+            </div>
+
+            <div class="row">
+              <button class="btn small ghost" id="btnToggleRTL" title="Toggle RTL (Farsi UI)">
+                <span class="kbd">RTL</span> Toggle
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-top:14px">
+            <div class="cardHeader" style="padding:12px; border-radius:16px; background: rgba(0,0,0,.10); border:1px solid rgba(255,255,255,.08)">
+              <div>
+                <h2 style="margin:0; font-size:13px; letter-spacing:.10em; text-transform:uppercase">Recommended Steps</h2>
+                <p style="margin:6px 0 0">A checklist that TechSupport AI™ would follow. Mark steps done as you simulate progress.</p>
+              </div>
+              <div class="row">
+                <button class="btn small" id="btnStepDone">Mark Next Step Done</button>
+                <button class="btn small ghost" id="btnClearSteps">Clear</button>
+              </div>
+            </div>
+            <div class="cardBody" style="padding:12px">
+              <div class="steps" id="steps"></div>
+              <div class="hint" style="margin-top:10px">
+                Tip: Level 1 should try 2 fixes. If still blocked—or severity is High/Critical—promote to Level 2 and start VisionScreen™.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Case Timeline + VisionScreen + Integrations -->
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h2>Support Timeline</h2>
+            <p>Everything gets logged to Firebase (Firestore): call intake → steps tried → artifacts → resolution or escalation packet.</p>
+          </div>
+          <div class="row">
+            <button class="btn small" id="btnAddNote">Add Event</button>
+            <button class="btn small ghost" id="btnExport">Export Packet</button>
+          </div>
+        </div>
+
+        <div class="cardBody">
+          <div class="timeline" id="timeline"></div>
+
+          <div style="margin-top:14px" class="cardHeader">
+            <div>
+              <h2>VisionScreen™</h2>
+              <p>Level 2 only. Prefer screen share for clarity; camera-to-screen is a universal fallback.</p>
+            </div>
+            <div class="tabs" aria-label="Vision modes">
+              <div class="tab active" data-vision="screen" id="tabScreen">
+                Screen Share <span class="tag">Preferred</span>
+              </div>
+              <div class="tab" data-vision="camera" id="tabCamera">
+                Camera <span class="tag">Fallback</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="visionWrap">
+            <div class="visionBox">
+              <video id="screenVideo" autoplay playsinline muted></video>
+              <div class="visionOverlay">
+                <div class="left">
+                  <span class="kbd">Session</span>
+                  <span id="sessionId">—</span>
+                  <span class="kbd">Mode</span>
+                  <span id="visionMode">Screen Share</span>
+                </div>
+                <div class="right">
+                  <button class="btn small primary" id="btnStartVision">Start</button>
+                  <button class="btn small ghost" id="btnStopVision">Stop</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="visionBox" style="background:
+              linear-gradient(135deg, rgba(124,92,255,.20), rgba(0,212,255,.10)),
+              url('https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&w=1200&q=70');
+              background-size: cover; background-position:center;">
+              <div style="position:absolute; inset:0; background:rgba(0,0,0,.35)"></div>
+              <div style="position:relative; padding:14px">
+                <div class="callout">
+                  <b style="display:block; margin-bottom:6px; color:rgba(255,255,255,.9)">What the agent “sees” (example)</b>
+                  • “You’re on <b>Settings → Integrations</b>.”<br/>
+                  • “I see an error: <b>Webhook validation failed</b>.”<br/>
+                  • “Next: open Twilio dashboard, copy the exact webhook URL, then paste here.”<br/><br/>
+                  <span style="color:rgba(255,255,255,.65)">
+                    In production, the agent should avoid storing sensitive on-screen data unless explicitly permitted.
+                  </span>
+                </div>
+
+                <div style="margin-top:12px" class="meter">
+                  <div class="meterTop">
+                    <b>L2 Hypothesis</b>
+                    <span id="hypo">Missing/incorrect webhook URL</span>
+                  </div>
+                  <div class="meterHint" id="hypoHint">
+                    If multiple causes are plausible, the agent should present options and ask a targeted question—never bluff.
+                  </div>
+                </div>
+
+                <div style="margin-top:12px" class="row">
+                  <button class="btn small" id="btnSafeAction">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4Z" stroke="currentColor" stroke-width="2"/></svg>
+                    Run Safe Action
+                  </button>
+                  <button class="btn small ghost" id="btnRecap">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Send Recap
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px" class="cardHeader">
+            <div>
+              <h2>Integrations</h2>
+              <p>Twilio for calls, SMS for session links, Email for resolution packets, Firebase for case storage & analytics.</p>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="twoCol">
+            <div class="meter">
+              <div class="meterTop">
+                <b>Twilio</b>
+                <span class="kbd">Voice + SMS</span>
+              </div>
+              <div class="meterHint">
+                • Incoming call triggers L1.<br/>
+                • L2 takeover sends secure SMS link.<br/>
+                • Optional: send post-call recap SMS.
+              </div>
+            </div>
+
+            <div class="meter">
+              <div class="meterTop">
+                <b>Firebase (Firestore)</b>
+                <span class="kbd">Sessions + Cases</span>
+              </div>
+              <div class="meterHint">
+                • Store case file, timeline events, and sanitized artifacts.<br/>
+                • Keep language locked per session.<br/>
+                • Use security rules like a vault.
+              </div>
+            </div>
+
+            <div class="meter">
+              <div class="meterTop">
+                <b>Email</b>
+                <span class="kbd">Resolution Packet</span>
+              </div>
+              <div class="meterHint">
+                • Send steps tried + outcome.<br/>
+                • Include ticket ID + links to docs.<br/>
+                • Optional bilingual recap.
+              </div>
+            </div>
+
+            <div class="meter">
+              <div class="meterTop">
+                <b>Multilingual</b>
+                <span class="kbd">EN/FR/DE/IT/中文/FA</span>
+              </div>
+              <div class="meterHint">
+                • Detect language early, then confirm.<br/>
+                • Keep consistent voice + tone per locale.<br/>
+                • Support RTL rendering for فارسی.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <div><b>TechSupport AI™</b> • Invention date: <b>12/15/2025</b> • Demo UI (front-end only)</div>
+      <div style="margin-top:6px">
+        Designed for: Twilio calls → L1 triage → L2 VisionScreen™ (screen share/camera) → SMS + Email recap → Firebase case memory
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- Utilities ---
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    const nowTime = () => new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+    const uid = () => Math.random().toString(16).slice(2, 10).toUpperCase();
+
+    // --- State ---
+    const state = {
+      mode: "L1",          // L1 | L2
+      activeCalls: 0,
+      sessionId: "",
+      vision: { type: "screen", stream: null },
+      steps: [],
+      stepIndex: 0,
+      rtl: false,
+      confidence: 58
+    };
+
+    // --- Timeline ---
+    function iconSVG(type){
+      const common = 'width="16" height="16" viewBox="0 0 24 24" fill="none"';
+      if(type === "call") return `<svg ${common}><path d="M22 16.9v3a2 2 0 0 1-2.2 2c-3.2-.3-6.3-1.4-9-3.2a21.6 21.6 0 0 1-6.6-6.6C2.4 9.4 1.3 6.3 1 3.1A2 2 0 0 1 3 1h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L7 8.9a16 16 0 0 0 6.6 6.6l1.4-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6A2 2 0 0 1 22 16.9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      if(type === "sms") return `<svg ${common}><path d="M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`;
+      if(type === "note") return `<svg ${common}><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+      if(type === "lvl2") return `<svg ${common}><path d="M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 7l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+      if(type === "safe") return `<svg ${common}><path d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4Z" stroke="currentColor" stroke-width="2"/></svg>`;
+      if(type === "email") return `<svg ${common}><path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="2"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+      if(type === "human") return `<svg ${common}><path d="M20 21v-2a4 4 0 0 0-3-3.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 21v-2a4 4 0 0 1 3-3.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 13a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="2"/></svg>`;
+      return `<svg ${common}><path d="M12 2v20" stroke="currentColor" stroke-width="2"/></svg>`;
+    }
+
+    function addEvent(type, title, desc){
+      const el = document.createElement("div");
+      el.className = "event";
+      el.innerHTML = `
+        <div class="badgeIcon" aria-hidden="true">${iconSVG(type)}</div>
+        <div class="meta">
+          <div class="top">
+            <div class="title">${escapeHTML(title)}</div>
+            <div class="time">${escapeHTML(nowTime())}</div>
+          </div>
+          <div class="desc">${escapeHTML(desc)}</div>
+        </div>
+      `;
+      $("#timeline").prepend(el);
+    }
+
+    function escapeHTML(s){
+      return String(s ?? "").replace(/[&<>"']/g, (m)=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    // --- Confidence ---
+    function setConfidence(pct){
+      state.confidence = Math.max(5, Math.min(95, pct));
+      $("#confPct").textContent = `${state.confidence}%`;
+      $("#confFill").style.width = `${state.confidence}%`;
+
+      const hint =
+        state.confidence >= 75 ? "High confidence: proceed with the fix, confirm outcome, then send recap."
+        : state.confidence >= 45 ? "Medium confidence: try 1–2 targeted steps. If still blocked, promote to Level 2."
+        : "Low confidence: ask clarifying questions or promote to Level 2 (VisionScreen™).";
+
+      $("#confHint").textContent = hint;
+    }
+
+    // --- Steps ---
+    function renderSteps(){
+      const wrap = $("#steps");
+      wrap.innerHTML = "";
+      if(state.steps.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "callout";
+        empty.innerHTML = `<b style="display:block;margin-bottom:6px;color:rgba(255,255,255,.9)">No playbook yet</b>
+          Click <b>Build L1 Playbook</b> to generate a checklist based on category and severity.`;
+        wrap.appendChild(empty);
+        return;
+      }
+      state.steps.forEach((s, i) => {
+        const el = document.createElement("div");
+        el.className = "step" + (i < state.stepIndex ? " done" : "");
+        el.innerHTML = `
+          <div class="check">${i < state.stepIndex ? "✓" : ""}</div>
+          <div class="txt">
+            <b>${escapeHTML(s.title)}</b>
+            <span>${escapeHTML(s.desc)}</span>
+          </div>
+        `;
+        wrap.appendChild(el);
+      });
+    }
+
+    function buildPlaybook(){
+      const cat = $("#category").value;
+      const sev = $("#severity").value;
+      const prod = $("#product").value;
+
+      let steps = [
+        {title:"Confirm context", desc:`Verify product (${prod}), account/workspace, app version, and last action before the issue.`},
+        {title:"Capture error verbatim", desc:"Ask for exact on-screen error text (or have them read it). Avoid assumptions."},
+      ];
+
+      if(cat.includes("Login")){
+        steps.push({title:"Access basics", desc:"Check email spelling, password reset, and role/permission assignment."});
+        steps.push({title:"Session cleanup", desc:"Clear cache/cookies or try incognito; confirm time/device settings if MFA is involved."});
+        steps.push({title:"If still blocked", desc:"Promote to L2 and start VisionScreen™ to observe the login flow and error state."});
+        setConfidence(62);
+      } else if(cat.includes("Billing")){
+        steps.push({title:"Plan & status check", desc:"Confirm plan status, invoice state, and whether payment method is valid."});
+        steps.push({title:"Common fix", desc:"Update payment method and retry; confirm webhook events if applicable."});
+        steps.push({title:"If payment failure persists", desc:"Promote to L2 for screen share to verify portal state and exact decline/error codes."});
+        setConfidence(55);
+      } else if(cat.includes("API")){
+        steps.push({title:"Key validity", desc:"Confirm key format, environment, and that it matches the correct workspace/project."});
+        steps.push({title:"Headers & base URL", desc:"Verify auth header, endpoint base URL, and time skew if using signed tokens."});
+        steps.push({title:"If uncertain", desc:"Promote to L2 to visually inspect the integration screen and request a sanitized snippet."});
+        setConfidence(48);
+      } else if(cat.includes("Integrations")){
+        steps.push({title:"Integration prerequisites", desc:"Check required fields: webhook URL, callback domains, and permissions."});
+        steps.push({title:"Re-auth / reconnect", desc:"Run safe reconnect steps and confirm the connected state is visible."});
+        steps.push({title:"If webhook errors", desc:"Promote to L2 to view the exact settings and confirm copied URLs match."});
+        setConfidence(52);
+      } else if(cat.includes("Uploads")){
+        steps.push({title:"File constraints", desc:"Confirm allowed types/size, naming, and network conditions."});
+        steps.push({title:"Retry path", desc:"Try a smaller sample file; confirm the upload endpoint status."});
+        steps.push({title:"If UI ambiguous", desc:"Promote to L2 to observe uploader behavior and error display."});
+        setConfidence(57);
+      } else if(cat.includes("Performance")){
+        steps.push({title:"Repro steps", desc:"Get a short repro path (3–5 steps) and the exact screen where it fails."});
+        steps.push({title:"Common checks", desc:"Browser/device, network, and any recent changes (deploy/release)."});
+        steps.push({title:"If intermittent", desc:"Promote to L2 and collect sanitized artifacts. Escalate if severity is High/Critical."});
+        setConfidence(44);
+      } else if(cat.includes("Affiliate")){
+        steps.push({title:"Attribution basics", desc:"Confirm affiliate link format, campaign parameters, and the expected conversion event."});
+        steps.push({title:"Timing & payout rules", desc:"Explain delay windows, validation rules, and payout schedule clearly."});
+        steps.push({title:"If missing conversion", desc:"Promote to L2 to review the exact link flow and referral tracking settings."});
+        setConfidence(60);
+      }
+
+      if(sev === "High" || sev === "Critical"){
+        steps.unshift({title:"Severity protocol", desc:`Severity is ${sev}. Prioritize quick containment. Consider auto-promoting to Level 2.`});
+        setConfidence(Math.max(40, state.confidence - 8));
+      }
+
+      state.steps = steps;
+      state.stepIndex = 0;
+      renderSteps();
+
+      addEvent("note", "Playbook built", `Generated a ${state.mode} checklist for category: ${cat} (${sev}).`);
+    }
+
+    // --- Tabs / Modes ---
+    function setMode(mode){
+      state.mode = mode;
+      $("#statMode").textContent = mode;
+      $("#tabL1").classList.toggle("active", mode === "L1");
+      $("#tabL2").classList.toggle("active", mode === "L2");
+
+      addEvent(mode === "L2" ? "lvl2" : "note", `Mode set: ${mode}`, mode === "L2"
+        ? "TechSupport AI-2™ is active. VisionScreen™ is available."
+        : "TechSupport AI™ is active. Triage + common fixes first.");
+
+      // Encourage L2 for high confidence changes? Keep it simple.
+    }
+
+    // --- RTL ---
+    function applyRTL(enabled){
+      state.rtl = enabled;
+      document.body.classList.toggle("rtl", enabled);
+      if(enabled) addEvent("note", "RTL enabled", "Right-to-left UI enabled for فارسی (Farsi) support flow.");
+      else addEvent("note", "RTL disabled", "Right-to-left UI disabled.");
+    }
+
+    // --- Simulate call ---
+    function simulateCall(){
+      if(!state.sessionId) {
+        state.sessionId = `TS-${uid()}`;
+        $("#sessionId").textContent = state.sessionId;
+      }
+
+      state.activeCalls += 1;
+      $("#statCalls").textContent = String(state.activeCalls);
+
+      const lang = $("#language").value;
+      const prod = $("#product").value;
+      const cat = $("#category").value;
+
+      addEvent("call", "Incoming call answered (Twilio)", `L1 started. Product: ${prod}. Category: ${cat}. Language: ${lang}.`);
+
+      // Slightly adjust confidence based on “clarity” of input
+      const problem = $("#problem").value.trim();
+      if(problem.length >= 45) setConfidence(Math.min(80, state.confidence + 8));
+      else if(problem.length === 0) setConfidence(Math.max(35, state.confidence - 10));
+
+      // Auto RTL if Farsi
+      if(lang === "fa") applyRTL(true);
+
+      // Gentle prompt
+      if(problem.length === 0){
+        addEvent("note", "Agent question", "Please describe the issue in one sentence. If you can, read the exact error message.");
+      }
+    }
+
+    // --- Escalate flows ---
+    function promoteToL2(){
+      setMode("L2");
+
+      // Auto-generate session ID if missing
+      if(!state.sessionId) {
+        state.sessionId = `TS-${uid()}`;
+        $("#sessionId").textContent = state.sessionId;
+      }
+
+      addEvent("lvl2", "Promoted to Level 2", "TechSupport AI-2™ took over with full context from L1 (no re-explaining).");
+      addEvent("sms", "Prepare VisionScreen™ link", "Send secure SMS link (expires in 10 minutes) to start screen share or camera session.");
+
+      // Raise confidence a bit because L2 has “eyes”
+      setConfidence(Math.min(88, state.confidence + 12));
+    }
+
+    function escalateToHuman(){
+      addEvent("human", "Escalated to human", "Created escalation packet: summary, timeline, steps tried, and sanitized artifacts (if permitted).");
+      // In demo: decrement call count if >0
+      if(state.activeCalls > 0){
+        state.activeCalls -= 1;
+        $("#statCalls").textContent = String(state.activeCalls);
+      }
+    }
+
+    // --- SMS Link simulation ---
+    function sendSMSLink(){
+      if(!state.sessionId) {
+        state.sessionId = `TS-${uid()}`;
+        $("#sessionId").textContent = state.sessionId;
+      }
+      const contact = $("#contact").value.trim() || "caller";
+      const token = uid() + uid();
+      const link = `https://yourdomain.com/visionscreen/session/${state.sessionId}?token=${token}`;
+      addEvent("sms", "SMS sent: VisionScreen™ session link", `To: ${contact}. Link: ${link}`);
+    }
+
+    // --- Vision capture ---
+    async function startVision(){
+      // Vision only allowed in L2 (by your design)
+      if(state.mode !== "L2"){
+        addEvent("note", "VisionScreen blocked (L2 only)", "Promote to Level 2 to start VisionScreen™.");
+        return;
+      }
+
+      stopVision();
+
+      try{
+        if(state.vision.type === "screen"){
+          $("#visionMode").textContent = "Screen Share";
+          const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+          state.vision.stream = stream;
+          $("#screenVideo").srcObject = stream;
+          addEvent("note", "VisionScreen started", "Screen share is active (preferred). Agent can guide based on what it sees.");
+        } else {
+          $("#visionMode").textContent = "Camera";
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
+          state.vision.stream = stream;
+          $("#screenVideo").srcObject = stream;
+          addEvent("note", "VisionScreen started", "Camera mode is active (fallback). Point the phone at the screen for guidance.");
+        }
+      } catch(err){
+        addEvent("note", "VisionScreen error", err?.message || "Permission denied or unavailable.");
+      }
+    }
+
+    function stopVision(){
+      if(state.vision.stream){
+        state.vision.stream.getTracks().forEach(t => t.stop());
+        state.vision.stream = null;
+      }
+      $("#screenVideo").srcObject = null;
+      // don't spam events on every tab click
+    }
+
+    // --- Vision tabs ---
+    function setVisionType(type){
+      state.vision.type = type;
+      $("#tabScreen").classList.toggle("active", type === "screen");
+      $("#tabCamera").classList.toggle("active", type === "camera");
+      $("#visionMode").textContent = type === "screen" ? "Screen Share" : "Camera";
+      addEvent("note", "Vision mode selected", type === "screen"
+        ? "Screen Share selected (recommended)."
+        : "Camera selected (fallback).");
+    }
+
+    // --- Safe action demo ---
+    function runSafeAction(){
+      if(state.mode !== "L2"){
+        addEvent("note", "Safe action blocked (needs L2)", "Promote to Level 2 before running safe, permissioned actions.");
+        return;
+      }
+      addEvent("safe", "Safe action executed", "Example: 'Reconnect integration' or 'Resend verification email' (user-approved, audited).");
+      setConfidence(Math.min(92, state.confidence + 6));
+    }
+
+    function sendRecap(){
+      const lang = $("#language").value;
+      addEvent("email", "Recap sent", `Sent a resolution summary via Email/SMS in language: ${lang}. (Optional bilingual recap supported.)`);
+    }
+
+    // --- Export packet demo ---
+    function exportPacket(){
+      const packet = {
+        invention_date: "12/15/2025",
+        product: $("#product").value,
+        language: $("#language").value,
+        severity: $("#severity").value,
+        category: $("#category").value,
+        contact: $("#contact").value,
+        problem: $("#problem").value,
+        mode: state.mode,
+        sessionId: state.sessionId || null,
+        confidence: state.confidence,
+        steps: state.steps.map((s, i)=>({ ...s, done: i < state.stepIndex })),
+        exported_at: new Date().toISOString()
+      };
+
+      const blob = new Blob([JSON.stringify(packet, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `TechSupportAI_Packet_${(state.sessionId || "NEW")}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      addEvent("note", "Exported packet", "Downloaded a JSON escalation packet (demo). In production, store in Firebase and attach to tickets.");
+    }
+
+    // --- Add note event ---
+    function addNote(){
+      const msg = prompt("Add a timeline event (short note):", "Caller reports the error happens after clicking 'Connect'.");
+      if(msg && msg.trim()){
+        addEvent("note", "Agent note", msg.trim());
+      }
+    }
+
+    // --- Steps progression ---
+    function markNextStepDone(){
+      if(state.steps.length === 0){
+        addEvent("note", "No steps to mark", "Build the playbook first.");
+        return;
+      }
+      if(state.stepIndex >= state.steps.length){
+        addEvent("note", "All steps complete", "If still unresolved, promote to Level 2 or escalate to human.");
+        return;
+      }
+      const s = state.steps[state.stepIndex];
+      state.stepIndex += 1;
+      renderSteps();
+      addEvent("note", "Step completed", s.title);
+      // Nudge confidence up as steps complete
+      setConfidence(Math.min(90, state.confidence + 4));
+    }
+
+    function clearSteps(){
+      state.steps = [];
+      state.stepIndex = 0;
+      renderSteps();
+      addEvent("note", "Steps cleared", "Checklist cleared.");
+    }
+
+    // --- Reset demo ---
+    function resetDemo(){
+      stopVision();
+      state.mode = "L1";
+      state.activeCalls = 0;
+      state.sessionId = "";
+      state.steps = [];
+      state.stepIndex = 0;
+      state.rtl = false;
+      setConfidence(58);
+
+      $("#statCalls").textContent = "0";
+      $("#statMode").textContent = "L1";
+      $("#sessionId").textContent = "—";
+      $("#problem").value = "";
+
+      $("#timeline").innerHTML = "";
+      renderSteps();
+      document.body.classList.remove("rtl");
+
+      addEvent("note", "Demo reset", "State cleared. Ready for a new simulated call.");
+    }
+
+    // --- Language change -> auto RTL for Farsi ---
+    $("#language").addEventListener("change", () => {
+      const lang = $("#language").value;
+      if(lang === "fa") applyRTL(true);
+      else applyRTL(false);
+
+      // Update a tiny hint in hypothesis for fun
+      const hypo = $("#hypo");
+      hypo.textContent = (lang === "fa")
+        ? "احتمالاً مشکل از تنظیمات یا مجوزهاست"
+        : "Missing/incorrect webhook URL";
+
+      addEvent("note", "Language set", `Language locked for this session: ${lang}.`);
+    });
+
+    // --- Wire up ---
+    $("#btnGenerateSteps").addEventListener("click", buildPlaybook);
+    $("#btnStepDone").addEventListener("click", markNextStepDone);
+    $("#btnClearSteps").addEventListener("click", clearSteps);
+
+    $("#btnSimCall").addEventListener("click", simulateCall);
+    $("#btnEscalate").addEventListener("click", promoteToL2);
+    $("#btnHuman").addEventListener("click", escalateToHuman);
+    $("#btnSendLink").addEventListener("click", sendSMSLink);
+
+    $("#btnStartVision").addEventListener("click", startVision);
+    $("#btnStopVision").addEventListener("click", () => {
+      stopVision();
+      addEvent("note", "VisionScreen stopped", "Live session ended.");
+    });
+
+    $("#tabScreen").addEventListener("click", () => setVisionType("screen"));
+    $("#tabCamera").addEventListener("click", () => setVisionType("camera"));
+
+    $("#tabL1").addEventListener("click", () => setMode("L1"));
+    $("#tabL2").addEventListener("click", () => setMode("L2"));
+
+    $("#btnAddNote").addEventListener("click", addNote);
+    $("#btnExport").addEventListener("click", exportPacket);
+
+    $("#btnSafeAction").addEventListener("click", runSafeAction);
+    $("#btnRecap").addEventListener("click", sendRecap);
+
+    $("#btnReset").addEventListener("click", resetDemo);
+    $("#btnNewCase").addEventListener("click", () => {
+      if(state.activeCalls === 0 && !state.sessionId){
+        addEvent("note", "New case created", "Fill intake fields, then simulate a call to start the timeline.");
+      } else {
+        addEvent("note", "New case (demo)", "Create a new case in production by generating a new sessionId + Firestore doc.");
+      }
+      state.sessionId = `TS-${uid()}`;
+      $("#sessionId").textContent = state.sessionId;
+      $("#problem").value = "";
+      state.steps = [];
+      state.stepIndex = 0;
+      renderSteps();
+      setConfidence(58);
+    });
+
+    $("#btnToggleRTL").addEventListener("click", () => applyRTL(!state.rtl));
+
+    // Confidence reacts a bit to problem input
+    $("#problem").addEventListener("input", () => {
+      const len = $("#problem").value.trim().length;
+      if(len === 0) setConfidence(50);
+      else if(len < 25) setConfidence(54);
+      else if(len < 80) setConfidence(62);
+      else setConfidence(70);
+    });
+
+    // Init
+    renderSteps();
+    addEvent("note", "TechSupport AI™ ready", "Use the buttons above to simulate a Twilio call, build a playbook, and promote to L2 VisionScreen™.");
+    setConfidence(58);
+    setVisionType("screen");
+  </script>
+</body>
+</html>
