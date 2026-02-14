@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "id": "connectivity-v1",
+    "name": "Connectivity Troubleshooting",
+    "description": "Guide customers through network and connection issues",
+    "version": "1.0.0",
+    "product": "General",
+    "category": "technical",
+    "language": "en",
+    "tags": ["connection", "network", "internet", "offline", "error"]
+  },
+  "triggers": {
+    "keywords": ["can't connect", "connection error", "network", "offline", "timeout", "not loading"],
+    "categories": ["technical", "connectivity"],
+    "products": ["General"],
+    "severity": ["low", "medium", "high"]
+  },
+  "steps": [
+    {
+      "id": "identify_platform",
+      "title": "Identify Platform",
+      "instruction": "Ask the customer which device and platform they're using (Web browser, iOS app, Android app, Desktop app). Also ask which browser if web.",
+      "expectedOutcome": "Customer identifies their platform",
+      "nextOnSuccess": "check_internet",
+      "maxAttempts": 2
+    },
+    {
+      "id": "check_internet",
+      "title": "Verify Internet Connection",
+      "instruction": "Ask the customer to verify their internet connection by visiting google.com or another website. Can they load other websites?",
+      "expectedOutcome": "Customer confirms internet is working",
+      "nextOnSuccess": "check_service_status",
+      "nextOnFailure": "troubleshoot_internet",
+      "maxAttempts": 1
+    },
+    {
+      "id": "troubleshoot_internet",
+      "title": "Basic Internet Troubleshooting",
+      "instruction": "Guide the customer to: 1) Check if WiFi is connected, 2) Try restarting their router/modem, 3) Try switching between WiFi and mobile data if on a phone.",
+      "expectedOutcome": "Customer's internet connection is restored",
+      "nextOnSuccess": "check_service_status",
+      "nextOnFailure": "isp_issue",
+      "maxAttempts": 2
+    },
+    {
+      "id": "isp_issue",
+      "title": "ISP Issue Detected",
+      "instruction": "Since basic troubleshooting didn't help, the issue appears to be with the customer's internet provider. Suggest they contact their ISP or try again when their connection is stable.",
+      "expectedOutcome": "Customer understands the issue is with their ISP",
+      "escalateOnFailure": false,
+      "maxAttempts": 1
+    },
+    {
+      "id": "check_service_status",
+      "title": "Check Service Status",
+      "instruction": "Check if there are any known service outages or maintenance. Ask the customer if they've seen any status updates on our status page.",
+      "expectedOutcome": "No current outages affecting the customer",
+      "nextOnSuccess": "clear_cache",
+      "nextOnFailure": "report_outage",
+      "maxAttempts": 1
+    },
+    {
+      "id": "report_outage",
+      "title": "Report Known Outage",
+      "instruction": "Inform the customer about the current service issue and provide an estimated time for resolution if available. Offer to notify them when service is restored.",
+      "expectedOutcome": "Customer is informed about the outage",
+      "maxAttempts": 1
+    },
+    {
+      "id": "clear_cache",
+      "title": "Clear Cache and Cookies",
+      "instruction": "Guide the customer to clear their browser cache and cookies, then refresh the page. For apps, suggest clearing app data or reinstalling.",
+      "expectedOutcome": "Customer clears cache and tries again",
+      "nextOnSuccess": "test_connection",
+      "nextOnFailure": "try_incognito",
+      "maxAttempts": 2
+    },
+    {
+      "id": "try_incognito",
+      "title": "Try Incognito Mode",
+      "instruction": "Ask the customer to try accessing the service in an incognito/private browsing window. This helps rule out extension conflicts.",
+      "expectedOutcome": "Service works in incognito mode",
+      "nextOnSuccess": "extension_conflict",
+      "nextOnFailure": "try_different_browser",
+      "maxAttempts": 1
+    },
+    {
+      "id": "extension_conflict",
+      "title": "Browser Extension Conflict",
+      "instruction": "The issue appears to be caused by a browser extension. Guide the customer to disable extensions one by one to identify the culprit, especially ad blockers and VPNs.",
+      "expectedOutcome": "Customer identifies problematic extension",
+      "nextOnSuccess": "verify_resolved",
+      "maxAttempts": 2
+    },
+    {
+      "id": "try_different_browser",
+      "title": "Try Different Browser",
+      "instruction": "Ask the customer to try accessing the service from a different browser (Chrome, Firefox, Safari, Edge). This helps isolate browser-specific issues.",
+      "expectedOutcome": "Service works in different browser",
+      "nextOnSuccess": "browser_issue",
+      "nextOnFailure": "escalate_technical",
+      "maxAttempts": 1
+    },
+    {
+      "id": "browser_issue",
+      "title": "Browser-Specific Issue",
+      "instruction": "The issue seems specific to the customer's browser. Suggest updating the browser to the latest version or using an alternative browser.",
+      "expectedOutcome": "Customer understands the browser issue",
+      "nextOnSuccess": "verify_resolved",
+      "maxAttempts": 1
+    },
+    {
+      "id": "test_connection",
+      "title": "Test Connection",
+      "instruction": "Ask the customer to try connecting to the service again. Can they now access it successfully?",
+      "expectedOutcome": "Customer successfully connects",
+      "nextOnSuccess": "verify_resolved",
+      "nextOnFailure": "try_incognito",
+      "maxAttempts": 1
+    },
+    {
+      "id": "escalate_technical",
+      "title": "Escalate to Technical Team",
+      "instruction": "The issue requires deeper investigation. Collect the customer's browser version, operating system, and any error messages shown.",
+      "expectedOutcome": "Information collected for escalation",
+      "escalateOnFailure": true,
+      "maxAttempts": 1
+    },
+    {
+      "id": "verify_resolved",
+      "title": "Verify Issue Resolved",
+      "instruction": "Confirm the customer can now connect and use the service normally. Ask if they need help with anything else.",
+      "expectedOutcome": "Customer confirms issue is resolved",
+      "maxAttempts": 1
+    }
+  ],
+  "escalation": {
+    "defaultMessage": "I'll connect you with our technical team who can investigate this further.",
+    "conditions": [
+      {
+        "reason": "persistent_error",
+        "message": "Since we've tried the standard troubleshooting steps, I'll connect you with a specialist who can look into this more deeply."
+      },
+      {
+        "reason": "outage",
+        "message": "We're aware of this issue and our team is working on it. I'll make sure you're notified when it's resolved."
+      }
+    ]
+  }
+}

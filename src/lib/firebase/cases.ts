@@ -344,3 +344,25 @@ export async function resolveCase(
     createdBy: 'system',
   });
 }
+
+// Get cases by phone number
+export async function getCasesByPhone(
+  tenantId: string,
+  phone: string
+): Promise<Case[]> {
+  if (!db) throw new Error('Firebase not initialized');
+  
+  const casesRef = collection(db, 'tenants', tenantId, 'cases');
+  const q = query(
+    casesRef,
+    where('customerContact.phone', '==', phone),
+    orderBy('createdAt', 'desc'),
+    limit(10)
+  );
+  
+  const snapshot = await getDocs(q);
+  
+  return snapshot.docs
+    .map((docSnap) => docToCase(docSnap))
+    .filter((c): c is Case => c !== null);
+}
