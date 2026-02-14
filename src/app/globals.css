@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 251 91% 63%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 251 91% 63%;
+    --radius: 0.75rem;
+
+    /* Support level colors */
+    --support-l1: 142 76% 36%;
+    --support-l2: 38 92% 50%;
+    --support-l3: 0 84% 60%;
+
+    /* Status colors */
+    --status-open: 217 91% 60%;
+    --status-pending: 38 92% 50%;
+    --status-resolved: 142 76% 36%;
+    --status-escalated: 0 84% 60%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 251 91% 63%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 251 91% 63%;
+
+    /* Support level colors (dark mode) */
+    --support-l1: 142 76% 46%;
+    --support-l2: 38 92% 60%;
+    --support-l3: 0 84% 70%;
+
+    /* Status colors (dark mode) */
+    --status-open: 217 91% 70%;
+    --status-pending: 38 92% 60%;
+    --status-resolved: 142 76% 46%;
+    --status-escalated: 0 84% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Gradient backgrounds for hero sections */
+.gradient-bg {
+  background: 
+    radial-gradient(1200px 800px at 20% 10%, hsl(var(--primary) / 0.15), transparent 55%),
+    radial-gradient(900px 700px at 85% 25%, hsl(190 100% 50% / 0.1), transparent 55%),
+    radial-gradient(800px 900px at 60% 95%, hsl(300 100% 70% / 0.08), transparent 60%);
+}
+
+.dark .gradient-bg {
+  background: 
+    radial-gradient(1200px 800px at 20% 10%, hsl(var(--primary) / 0.25), transparent 55%),
+    radial-gradient(900px 700px at 85% 25%, hsl(190 100% 50% / 0.15), transparent 55%),
+    radial-gradient(800px 900px at 60% 95%, hsl(300 100% 70% / 0.12), transparent 60%);
+}
+
+/* Pulse animation for live indicators */
+.pulse-dot {
+  @apply relative;
+}
+
+.pulse-dot::before {
+  content: '';
+  @apply absolute inset-0 rounded-full bg-current animate-pulse-ring;
+}
