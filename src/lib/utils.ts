@@ -31,6 +31,24 @@ export function formatDate(date: Date | { toDate: () => Date }, locale: string =
   }).format(d);
 }
 
+export function formatDateTime(date: Date | { toDate: () => Date }, locale: string = 'en'): string {
+  const d = 'toDate' in date ? date.toDate() : date;
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(d);
+}
+
+export function formatTime(date: Date | { toDate: () => Date }, locale: string = 'en'): string {
+  const d = 'toDate' in date ? date.toDate() : date;
+  return new Intl.DateTimeFormat(locale, {
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(d);
+}
+
 export function formatRelativeTime(date: Date | { toDate: () => Date }, locale: string = 'en'): string {
   const d = 'toDate' in date ? date.toDate() : date;
   const now = new Date();

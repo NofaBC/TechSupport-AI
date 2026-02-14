@@ -59,12 +59,22 @@
     "summary": "Summary",
     "timeline": "Timeline",
     "artifacts": "Artifacts",
+    "chat": "Chat",
     "actions": "Actions",
     "promoteToL2": "Promote to L2",
     "escalateToHuman": "Escalate to Human",
     "resolve": "Mark Resolved",
     "sendRecap": "Send Recap",
-    "exportPacket": "Export Packet"
+    "exportPacket": "Export Packet",
+    "noCases": "No cases found",
+    "loadMore": "Load More",
+    "allStatus": "All Status",
+    "allSeverity": "All Severity",
+    "allLevels": "All Levels",
+    "searchPlaceholder": "Search tickets, products...",
+    "noMessages": "No messages yet",
+    "noArtifacts": "No artifacts yet",
+    "goBack": "Go Back"
   },
   "status": {
     "open": "Open",
