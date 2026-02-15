@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCase, updateCase, addTimelineEvent, getTimelineEvents } from '@/lib/firebase/cases';
 import { generateL2EscalationSummary } from '@/lib/ai/l2-agent';
+import { addToL3Queue } from '@/lib/l3';
+import { notifyL3Escalation } from '@/lib/notifications';
 
 interface RouteParams {
   params: { id: string };
@@ -92,11 +94,42 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       createdBy: initiatedBy,
     });
 
-    // If escalating to L3, we might want to notify human agents
-    // This would integrate with email/SMS notifications in production
+    // If escalating to L3, add to queue and send notifications
+    let l3QueueId: string | undefined;
     if (targetLevel === 'L3') {
-      // TODO: Send notification to human support queue
-      console.log(`Case ${caseId} escalated to L3 - notification would be sent`);
+      // Add to L3 queue
+      const queueItem = await addToL3Queue({
+        caseId,
+        caseNumber: caseData.ticketNumber,
+        tenantId,
+        priority: caseData.severity || 'medium',
+        customerName: caseData.customerContact?.name || 'Unknown',
+        summary: caseData.summary || caseData.problem || 'No summary',
+        escalationReason: reason || 'Escalated by AI/System',
+        aiRecommendation: notes,
+      });
+      l3QueueId = queueItem.id;
+
+      // Send notifications (email + Slack)
+      const l3Emails = process.env.L3_NOTIFICATION_EMAILS?.split(',') || [];
+      await notifyL3Escalation(
+        {
+          caseId,
+          caseNumber: caseData.ticketNumber,
+          customerName: caseData.customerContact?.name || 'Unknown',
+          customerEmail: caseData.customerContact?.email,
+          customerPhone: caseData.customerContact?.phone,
+          priority: caseData.severity || 'medium',
+          summary: caseData.summary || caseData.problem || 'No summary',
+          escalationReason: reason || 'Escalated by AI/System',
+          aiRecommendation: notes,
+          tenantId,
+        },
+        {
+          emailRecipients: l3Emails,
+          sendSlack: true,
+        }
+      );
     }
 
     return NextResponse.json({
@@ -106,6 +139,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       newLevel: targetLevel,
       status: newStatus,
       escalationSummary,
+      l3QueueId,
     });
   } catch (error) {
     console.error('Escalation error:', error);
