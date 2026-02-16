@@ -1,27 +1,14 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { locales, isRtlLocale, type Locale } from '@/i18n';
-import '../globals.css';
+import { locales, type Locale } from '@/i18n';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
-
-export const metadata: Metadata = {
-  title: 'TechSupport AI™ — Intelligent Support Command Center',
-  description: 'Three-tier AI support system with VisionScreen™ guided troubleshooting',
-  icons: {
-    icon: '/favicon.ico',
-  },
-};
-
-interface RootLayoutProps {
+interface LocaleLayoutProps {
   children: React.ReactNode;
   params: { locale: string };
 }
 
-export default async function RootLayout({ children, params: { locale } }: RootLayoutProps) {
+export default async function LocaleLayout({ children, params: { locale } }: LocaleLayoutProps) {
   if (!locales.includes(locale as Locale)) {
     notFound();
   }
@@ -30,16 +17,11 @@ export default async function RootLayout({ children, params: { locale } }: RootL
   setRequestLocale(locale);
 
   const messages = await getMessages();
-  const isRtl = isRtlLocale(locale as Locale);
 
   return (
-    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages}>
+      {children}
+    </NextIntlClientProvider>
   );
 }
 
