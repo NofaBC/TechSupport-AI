@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
+import { notifyCommandDesk, generateCustomerResponse } from '@/lib/webhooks/commanddesk';
 import type { Case, CaseStatus } from '@/types';
 
 // GET /api/cases/[id] - Get a single case
@@ -154,6 +155,25 @@ export async function PATCH(
         createdBy: body.updatedBy || 'system',
         createdAt: new Date(),
       });
+      
+      // Notify CommandDesk AI when case is resolved (if originated from there)
+      if (body.status === 'resolved' && currentData.source === 'commanddesk-ai') {
+        const customerResponse = generateCustomerResponse(
+          currentData.ticketNumber,
+          body.resolution || body.notes || 'Your issue has been resolved.',
+          currentData.product
+        );
+        
+        await notifyCommandDesk({
+          caseId: id,
+          ticketNumber: currentData.ticketNumber,
+          status: 'resolved',
+          responseToCustomer: customerResponse,
+          resolvedAt: new Date().toISOString(),
+          resolvedBy: body.updatedBy || 'system',
+          resolutionNotes: body.resolution || body.notes,
+        });
+      }
     }
     
     // Return updated case

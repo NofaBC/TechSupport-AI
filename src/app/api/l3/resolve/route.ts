@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { resolveL3Case } from '@/lib/l3';
-import { updateCase, addTimelineEvent } from '@/lib/firebase/cases';
+import { getCase, updateCase, addTimelineEvent } from '@/lib/firebase/cases';
+import { notifyCommandDesk, generateCustomerResponse } from '@/lib/webhooks/commanddesk';
 
 /**
  * POST /api/l3/resolve - Resolve an L3 case
@@ -54,6 +55,28 @@ export async function POST(request: NextRequest) {
       },
       createdBy: agentId,
     });
+
+    // Get case details for webhook
+    const caseData = await getCase(tenantId, caseId);
+    
+    // Notify CommandDesk AI (if the case originated from there)
+    if (caseData?.source === 'commanddesk-ai') {
+      const customerResponse = generateCustomerResponse(
+        caseData.ticketNumber,
+        resolution,
+        caseData.product
+      );
+      
+      await notifyCommandDesk({
+        caseId,
+        ticketNumber: caseData.ticketNumber,
+        status: 'resolved',
+        responseToCustomer: customerResponse,
+        resolvedAt: new Date().toISOString(),
+        resolvedBy: agentId,
+        resolutionNotes: resolution,
+      });
+    }
 
     return NextResponse.json({
       success: true,

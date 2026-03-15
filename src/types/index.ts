@@ -67,6 +67,8 @@ export interface CustomerContact {
   name?: string;
 }
 
+export type CaseSource = 'phone' | 'sms' | 'email' | 'web' | 'commanddesk-ai' | 'api';
+
 export interface Case {
   id: string;
   tenantId: string;
@@ -81,6 +83,7 @@ export interface Case {
   assignedAgent?: string;
   summary?: string;
   problem?: string;
+  source?: CaseSource; // Where the case originated from
   createdAt: Timestamp;
   updatedAt: Timestamp;
   resolvedAt?: Timestamp;
