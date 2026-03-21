@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { setRequestLocale } from 'next-intl/server';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Timeline } from '@/components/cases/Timeline';
 import { ChatTranscript } from '@/components/cases/ChatTranscript';
 import { formatDateTime, getStatusColor, getSeverityColor, getLevelColor } from '@/lib/utils';
+import { getCase, getTimelineEvents } from '@/lib/firebase/cases';
 import type { Case, TimelineEvent } from '@/types';
 
 type TabType = 'chat' | 'timeline' | 'artifacts';
@@ -20,75 +21,62 @@ export default function CaseDetailPage() {
   const locale = params.locale as string;
   const caseId = params.caseId as string;
   
+  const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [caseData, setCaseData] = useState<Case | null>(null);
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // For demo, using mock data - replace with real Firestore subscription later
+  // Initialize Firebase Auth
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      // Mock case data for demo
-      setCaseData({
-        id: caseId,
-        tenantId: 'demo-tenant',
-        ticketNumber: 'TS-20260214-A1B2',
-        product: 'Demo Product',
-        category: 'Technical Support',
-        severity: 'medium',
-        language: 'en',
-        status: 'open',
-        currentLevel: 'L1',
-        customerContact: {
-          phone: '+1-555-0123',
-          name: 'John Doe',
-          email: 'john@example.com',
-        },
-        createdAt: new Date() as unknown as Case['createdAt'],
-        updatedAt: new Date() as unknown as Case['updatedAt'],
-      });
+    import('@/lib/firebase/client').then((module) => {
+      const auth = module.auth;
+      if (auth) {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+          setUser(currentUser);
+          if (!currentUser) {
+            setIsLoading(false);
+          }
+        });
+        return () => unsubscribe();
+      } else {
+        setIsLoading(false);
+      }
+    });
+  }, []);
+
+  // Fetch real case data from Firebase
+  useEffect(() => {
+    async function fetchCaseData() {
+      if (!user?.uid || !caseId) return;
       
-      // Mock timeline events
-      setEvents([
-        {
-          id: '1',
-          caseId: caseId,
-          type: 'call_started',
-          level: 'L1',
-          content: 'Customer initiated support call',
-          metadata: { source: 'phone' },
-          createdBy: 'system',
-          createdAt: new Date(Date.now() - 300000) as unknown as TimelineEvent['createdAt'],
-        },
-        {
-          id: '2',
-          caseId: caseId,
-          type: 'ai_response',
-          level: 'L1',
-          content: 'Hello! I\'m your AI support assistant. How can I help you today?',
-          metadata: {},
-          createdBy: 'ai',
-          createdAt: new Date(Date.now() - 240000) as unknown as TimelineEvent['createdAt'],
-        },
-        {
-          id: '3',
-          caseId: caseId,
-          type: 'step_attempted',
-          level: 'L1',
-          content: 'Running initial diagnostics...',
-          metadata: { step: 'diagnostics', outcome: 'pending' },
-          createdBy: 'ai',
-          createdAt: new Date(Date.now() - 180000) as unknown as TimelineEvent['createdAt'],
-        },
-      ]);
+      setIsLoading(true);
+      setError(null);
       
-      setIsLoading(false);
-    }, 500);
+      try {
+        // Fetch case data
+        const fetchedCase = await getCase(user.uid, caseId);
+        if (!fetchedCase) {
+          setError('Case not found');
+          setIsLoading(false);
+          return;
+        }
+        setCaseData(fetchedCase);
+        
+        // Fetch timeline events
+        const fetchedEvents = await getTimelineEvents(user.uid, caseId);
+        setEvents(fetchedEvents);
+      } catch (err) {
+        console.error('Error fetching case:', err);
+        setError('Failed to load case details');
+      } finally {
+        setIsLoading(false);
+      }
+    }
     
-    return () => clearTimeout(timer);
-  }, [caseId]);
+    fetchCaseData();
+  }, [user?.uid, caseId]);
 
   if (error) {
     return (
