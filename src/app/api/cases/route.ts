@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase/admin';
 import { generateTicketNumber } from '@/lib/firebase/cases';
+import { processL1Request, type L1AgentContext } from '@/lib/ai/l1-agent';
+import { sendL3EscalationSlack } from '@/lib/notifications/slack';
 import type { Case, CaseStatus, CaseSeverity, SupportLevel } from '@/types';
 
 // GET /api/cases - List cases for a tenant
@@ -167,8 +169,105 @@ export async function POST(request: NextRequest) {
         createdAt: now,
       });
     
+    // If there's a problem description, process with L1 AI
+    let aiResponse: string | null = null;
+    let shouldEscalate = false;
+    let escalationLevel: string | undefined;
+    let escalationReason: string | undefined;
+    
+    if (body.problem) {
+      try {
+        const context: L1AgentContext = {
+          tenantId,
+          caseId: caseRef.id,
+          product,
+          category: category || 'general',
+          language: language || 'en',
+          severity: severity as 'low' | 'medium' | 'high' | 'critical',
+          customerName: customerContact?.name,
+          conversationHistory: [],
+          failedAttempts: 0,
+        };
+        
+        const l1Result = await processL1Request(context, body.problem);
+        aiResponse = l1Result.message;
+        shouldEscalate = l1Result.shouldEscalate;
+        escalationLevel = l1Result.escalationLevel;
+        escalationReason = l1Result.escalationReason;
+        
+        // Add AI response to timeline
+        await db
+          .collection('tenants')
+          .doc(tenantId)
+          .collection('cases')
+          .doc(caseRef.id)
+          .collection('timeline')
+          .add({
+            type: 'ai_response',
+            level: 'L1',
+            content: aiResponse,
+            metadata: {
+              model: l1Result.metadata.model,
+              tokensUsed: l1Result.metadata.tokensUsed,
+              ragChunksUsed: l1Result.metadata.ragChunksUsed,
+              processingTimeMs: l1Result.metadata.processingTimeMs,
+              sources: l1Result.sources,
+            },
+            createdBy: 'ai',
+            createdAt: new Date(),
+          });
+        
+        // Handle escalation if needed
+        if (shouldEscalate && escalationLevel === 'L3') {
+          await db
+            .collection('tenants')
+            .doc(tenantId)
+            .collection('cases')
+            .doc(caseRef.id)
+            .update({
+              status: 'escalated_human',
+              currentLevel: 'L3',
+              updatedAt: new Date(),
+            });
+          
+          // Send Slack notification for L3 escalation
+          const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://tech-support-ai-one.vercel.app';
+          await sendL3EscalationSlack({
+            caseId: caseRef.id,
+            caseNumber: ticketNumber,
+            customerName: customerContact?.name || customerContact?.email || 'Customer',
+            priority: severity as 'low' | 'medium' | 'high' | 'critical',
+            summary: body.problem.substring(0, 200),
+            escalationReason: escalationReason || 'L1 AI escalated to human',
+            dashboardUrl: `${baseUrl}/en/dashboard/cases/${caseRef.id}`,
+          });
+        } else if (shouldEscalate && escalationLevel === 'L2') {
+          await db
+            .collection('tenants')
+            .doc(tenantId)
+            .collection('cases')
+            .doc(caseRef.id)
+            .update({
+              status: 'escalated_L2',
+              currentLevel: 'L2',
+              updatedAt: new Date(),
+            });
+        }
+      } catch (error) {
+        console.error('L1 AI processing error:', error);
+        // Continue without AI response - case still created
+      }
+    }
+    
     return NextResponse.json(
-      { id: caseRef.id, ...newCase },
+      { 
+        id: caseRef.id, 
+        ...newCase,
+        aiResponse,
+        shouldEscalate,
+        escalationLevel,
+        escalationReason,
+      },
       { status: 201 }
     );
   } catch (error) {
