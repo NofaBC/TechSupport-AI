@@ -380,5 +380,5 @@ CareerPilot-AI/
 ---
 
 **Last Updated:** March 12, 2026  
-**Maintained By:** Farhad Nassiri (@NofaBC)  
+**Maintained By:** Farhad Nasserghodsi (@NofaBC)  
 **Part of:** NOFA AI Factory - TechSupport AI™
