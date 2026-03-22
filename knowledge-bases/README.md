@@ -4,7 +4,46 @@ This directory contains knowledge base files and upload scripts for TechSupport 
 
 ## 📚 Knowledge Base Files
 
-Currently configured to upload **13 markdown files** from CareerPilot AI:
+### CareerPilot AI Support KB (3-Tier System)
+
+**Created:** March 22, 2026
+
+**Purpose:** Enable TechSupport AI to provide technical support for CareerPilot AI subscribers using a 3-tier escalation system (Level 1 AI → Level 2 AI → Level 3 Human via Slack).
+
+#### New KB Files (TechSupport AI Specific):
+
+1. **LEVEL1_BASIC_SUPPORT.md** (Level 1 - AI Automated)
+   - Basic user questions (how-to, navigation, account setup)
+   - Simple troubleshooting
+   - Credit & billing basics
+   - Feature explanations
+   - Resolution time: <30 seconds
+   - Handles 60-70% of support queries
+
+2. **LEVEL2_TROUBLESHOOTING.md** (Level 2 - AI Advanced)
+   - Complex technical issues requiring diagnosis
+   - Multi-step troubleshooting workflows
+   - Performance problems
+   - Data not saving issues
+   - API integration problems
+   - Resolution time: 2-5 minutes
+   - Handles 25-30% of support queries
+
+3. **LEVEL3_ESCALATION_GUIDE.md** (Level 3 - Human via Slack)
+   - Billing disputes & refunds
+   - Security concerns
+   - GDPR requests
+   - Confirmed bugs requiring code fixes
+   - Feature requests
+   - Resolution time: 1-24 hours
+   - Handles <10% of support queries
+   - Escalates to: Farhad Nasserghodsi via Slack
+
+---
+
+### CareerPilot AI General KB (From Main Repo)
+
+Currently configured to upload **9 markdown files** from CareerPilot AI repository:
 
 ### High Priority (Level 1-3 Support)
 1. **CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md** ⭐ (v1.1)
