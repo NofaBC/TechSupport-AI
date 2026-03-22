@@ -11,8 +11,28 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
 import type { KnowledgeBase } from '@/types';
+
+// NOFA SaaS Products - add more as needed
+const PRODUCTS = [
+  { value: 'careerpilot-ai', label: 'CareerPilot AI' },
+  { value: 'smartrank-ai', label: 'SmartRank AI' },
+  { value: 'recalliq', label: 'RecallIQ™' },
+  { value: 'visionwing', label: 'VisionWing™' },
+  { value: 'affiliateledger-ai', label: 'AffiliateLedger AI™' },
+  { value: 'commanddesk-ai', label: 'CommandDesk AI' },
+  { value: 'techsupport-ai', label: 'TechSupport AI™' },
+  { value: 'ai-factory', label: 'AI Factory' },
+  { value: 'other', label: 'Other (Custom)' },
+];
 
 interface CreateKnowledgeBaseDialogProps {
   open: boolean;
@@ -29,6 +49,7 @@ export function CreateKnowledgeBaseDialog({
 }: CreateKnowledgeBaseDialogProps) {
   const [name, setName] = useState('');
   const [product, setProduct] = useState('');
+  const [customProduct, setCustomProduct] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +61,8 @@ export function CreateKnowledgeBaseDialog({
       return;
     }
 
-    if (!name.trim() || !product.trim()) {
+    const finalProduct = product === 'other' ? customProduct.trim() : product;
+    if (!name.trim() || !finalProduct) {
       setError('Name and product are required');
       return;
     }
@@ -57,7 +79,7 @@ export function CreateKnowledgeBaseDialog({
         },
         body: JSON.stringify({
           name: name.trim(),
-          product: product.trim(),
+          product: product === 'other' ? customProduct.trim() : PRODUCTS.find(p => p.value === product)?.label || product,
           description: description.trim(),
         }),
       });
@@ -72,6 +94,7 @@ export function CreateKnowledgeBaseDialog({
       // Reset form
       setName('');
       setProduct('');
+      setCustomProduct('');
       setDescription('');
       
       onCreated(newKb);
@@ -89,6 +112,7 @@ export function CreateKnowledgeBaseDialog({
         // Reset form when closing
         setName('');
         setProduct('');
+        setCustomProduct('');
         setDescription('');
         setError(null);
       }
@@ -132,15 +156,35 @@ export function CreateKnowledgeBaseDialog({
               <label htmlFor="product" className="text-sm font-medium">
                 Product <span className="text-destructive">*</span>
               </label>
-              <Input
-                id="product"
-                placeholder="e.g., CareerPilot AI"
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-                disabled={loading}
-                required
-              />
+              <Select value={product} onValueChange={setProduct} disabled={loading}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a product" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRODUCTS.map((p) => (
+                    <SelectItem key={p.value} value={p.value}>
+                      {p.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            {product === 'other' && (
+              <div className="space-y-2">
+                <label htmlFor="customProduct" className="text-sm font-medium">
+                  Custom Product Name <span className="text-destructive">*</span>
+                </label>
+                <Input
+                  id="customProduct"
+                  placeholder="Enter your product name"
+                  value={customProduct}
+                  onChange={(e) => setCustomProduct(e.target.value)}
+                  disabled={loading}
+                  required
+                />
+              </div>
+            )}
 
             <div className="space-y-2">
               <label htmlFor="description" className="text-sm font-medium">
