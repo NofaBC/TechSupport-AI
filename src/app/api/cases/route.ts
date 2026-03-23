@@ -196,6 +196,18 @@ export async function POST(request: NextRequest) {
         escalationReason = l1Result.escalationReason;
         
         // Add AI response to timeline
+        const timelineMetadata: Record<string, unknown> = {
+          model: l1Result.metadata.model || 'gpt-4',
+          tokensUsed: l1Result.metadata.tokensUsed || 0,
+          ragChunksUsed: l1Result.metadata.ragChunksUsed || 0,
+          processingTimeMs: l1Result.metadata.processingTimeMs || 0,
+        };
+        
+        // Only add sources if they exist (Firestore doesn't like undefined)
+        if (l1Result.sources && l1Result.sources.length > 0) {
+          timelineMetadata.sources = l1Result.sources;
+        }
+        
         await db
           .collection('tenants')
           .doc(tenantId)
@@ -205,14 +217,8 @@ export async function POST(request: NextRequest) {
           .add({
             type: 'ai_response',
             level: 'L1',
-            content: aiResponse,
-            metadata: {
-              model: l1Result.metadata.model,
-              tokensUsed: l1Result.metadata.tokensUsed,
-              ragChunksUsed: l1Result.metadata.ragChunksUsed,
-              processingTimeMs: l1Result.metadata.processingTimeMs,
-              sources: l1Result.sources,
-            },
+            content: aiResponse || 'AI response generated',
+            metadata: timelineMetadata,
             createdBy: 'ai',
             createdAt: new Date(),
           });
