@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -39,10 +40,9 @@ interface LevelPerformance {
   L3: { resolved: number; avgTime: number };
 }
 
-// Mock tenant ID
-const MOCK_TENANT_ID = 'demo-tenant';
-
 export default function AnalyticsPage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [days, setDays] = useState(30);
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
@@ -50,11 +50,29 @@ export default function AnalyticsPage() {
   const [sla, setSla] = useState<SLAMetrics | null>(null);
   const [levelPerformance, setLevelPerformance] = useState<LevelPerformance | null>(null);
 
+  // Initialize Firebase Auth
+  useEffect(() => {
+    import('@/lib/firebase/client').then((module) => {
+      const auth = module.auth;
+      if (auth) {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+          setUser(currentUser);
+          setAuthLoading(false);
+        });
+        return () => unsubscribe();
+      } else {
+        setAuthLoading(false);
+      }
+    });
+  }, []);
+
   const fetchAnalytics = useCallback(async () => {
+    if (!user?.uid) return;
+    
     setLoading(true);
     try {
       const response = await fetch(
-        `/api/analytics/dashboard?tenantId=${MOCK_TENANT_ID}&days=${days}`
+        `/api/analytics/dashboard?tenantId=${user.uid}&days=${days}`
       );
       const data = await response.json();
       setMetrics(data.metrics);
@@ -66,11 +84,13 @@ export default function AnalyticsPage() {
     } finally {
       setLoading(false);
     }
-  }, [days]);
+  }, [user, days]);
 
   useEffect(() => {
-    fetchAnalytics();
-  }, [fetchAnalytics]);
+    if (user?.uid) {
+      fetchAnalytics();
+    }
+  }, [user?.uid, fetchAnalytics]);
 
   const formatTime = (minutes: number) => {
     if (minutes < 60) return `${minutes}m`;
@@ -79,12 +99,22 @@ export default function AnalyticsPage() {
     return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="p-6 flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p>Loading analytics...</p>
+          <p>{authLoading ? 'Authenticating...' : 'Loading analytics...'}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-gray-500">Please sign in to view analytics</p>
         </div>
       </div>
     );

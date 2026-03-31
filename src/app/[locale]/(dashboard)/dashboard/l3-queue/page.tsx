@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -43,20 +44,37 @@ const statusColors: Record<string, string> = {
   resolved: 'bg-green-100 text-green-800',
 };
 
-// Mock tenant ID - in production this would come from auth context
-const MOCK_TENANT_ID = 'demo-tenant';
-
 export default function L3QueuePage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const [queue, setQueue] = useState<L3QueueItem[]>([]);
   const [stats, setStats] = useState<QueueStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'queued' | 'assigned' | 'in_progress'>('all');
 
+  // Initialize Firebase Auth
+  useEffect(() => {
+    import('@/lib/firebase/client').then((module) => {
+      const auth = module.auth;
+      if (auth) {
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+          setUser(currentUser);
+          setAuthLoading(false);
+        });
+        return () => unsubscribe();
+      } else {
+        setAuthLoading(false);
+      }
+    });
+  }, []);
+
   const fetchQueue = useCallback(async () => {
+    if (!user?.uid) return;
+    
     try {
       const statusFilter = filter === 'all' ? 'queued,assigned,in_progress' : filter;
       const response = await fetch(
-        `/api/l3/queue?tenantId=${MOCK_TENANT_ID}&status=${statusFilter}&includeStats=true`
+        `/api/l3/queue?tenantId=${user.uid}&status=${statusFilter}&includeStats=true`
       );
       const data = await response.json();
       setQueue(data.queue || []);
@@ -66,16 +84,20 @@ export default function L3QueuePage() {
     } finally {
       setLoading(false);
     }
-  }, [filter]);
+  }, [user, filter]);
 
   useEffect(() => {
-    fetchQueue();
-    // Poll every 30 seconds
-    const interval = setInterval(fetchQueue, 30000);
-    return () => clearInterval(interval);
-  }, [fetchQueue]);
+    if (user?.uid) {
+      fetchQueue();
+      // Poll every 30 seconds
+      const interval = setInterval(fetchQueue, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user?.uid, fetchQueue]);
 
   const handleAssignToMe = async (queueItemId: string) => {
+    if (!user) return;
+    
     try {
       await fetch('/api/l3/queue', {
         method: 'POST',
@@ -83,8 +105,8 @@ export default function L3QueuePage() {
         body: JSON.stringify({
           action: 'assign',
           queueItemId,
-          agentId: 'current-agent-id', // Would come from auth
-          agentName: 'Current Agent', // Would come from auth
+          agentId: user.uid,
+          agentName: user.displayName || user.email || 'Agent',
         }),
       });
       fetchQueue();
@@ -116,6 +138,27 @@ export default function L3QueuePage() {
     const hours = Math.floor(mins / 60);
     return `${hours}h ${mins % 60}m`;
   };
+
+  if (authLoading) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4" />
+          <p>Authenticating...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <p className="text-gray-500">Please sign in to view the L3 queue</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">

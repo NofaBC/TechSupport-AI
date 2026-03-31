@@ -35,7 +35,17 @@ export function CasesPageContent() {
   }, []);
 
   const fetchCases = useCallback(async (reset: boolean = false) => {
-    if (!user?.uid) return;
+    if (!user?.uid) {
+      console.log('[CasesPage] No user UID, skipping fetch');
+      return;
+    }
+
+    console.log('[CasesPage] Fetching cases...', {
+      tenantId: user.uid,
+      filters,
+      reset,
+      hasLastDoc: !!lastDoc,
+    });
 
     setIsLoading(true);
     setError(null);
@@ -53,6 +63,12 @@ export function CasesPageContent() {
         reset ? undefined : lastDoc || undefined
       );
 
+      console.log('[CasesPage] Fetch result:', {
+        casesCount: result.cases.length,
+        hasMore: result.hasMore,
+        firstCase: result.cases[0]?.ticketNumber,
+      });
+
       if (reset) {
         setCases(result.cases);
       } else {
@@ -61,7 +77,7 @@ export function CasesPageContent() {
       setLastDoc(result.lastDoc);
       setHasMore(result.hasMore);
     } catch (err) {
-      console.error('Error fetching cases:', err);
+      console.error('[CasesPage] Error fetching cases:', err);
       setError('Failed to load cases');
     } finally {
       setIsLoading(false);
@@ -82,6 +98,7 @@ export function CasesPageContent() {
   };
 
   const handleFilterChange = (newFilters: CaseFilters) => {
+    console.log('[CasesPage] Filter changed:', newFilters);
     setFilters(newFilters);
     setLastDoc(null); // Reset pagination on filter change
   };
