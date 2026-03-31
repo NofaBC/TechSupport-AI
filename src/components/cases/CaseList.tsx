@@ -121,10 +121,10 @@ export function CaseList({
           {filters.status && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.status}</span>}
           {filters.severity && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.severity}</span>}
           {filters.level && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.level}</span>}
-          {filters.search && <span className="bg-blue-100 px-2 py-0.5 rounded">"{filters.search}"</span>}
+          {filters.search && <span className="bg-blue-100 px-2 py-0.5 rounded">&quot;{filters.search}&quot;</span>}
           <button
             onClick={() => {
-              const clearedFilters = { status: '', severity: '', level: '', search: '' };
+              const clearedFilters: CaseFilters = {};
               setFilters(clearedFilters);
               onFilterChange?.(clearedFilters);
             }}
@@ -145,7 +145,7 @@ export function CaseList({
               No cases match the current filters. 
               <button
                 onClick={() => {
-                  const clearedFilters = { status: '', severity: '', level: '', search: '' };
+                  const clearedFilters: CaseFilters = {};
                   setFilters(clearedFilters);
                   onFilterChange?.(clearedFilters);
                 }}
