@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Timeline } from '@/components/cases/Timeline';
 import { ChatTranscript } from '@/components/cases/ChatTranscript';
 import { formatDateTime, getStatusColor, getSeverityColor, getLevelColor } from '@/lib/utils';
-import { getCase, getTimelineEvents } from '@/lib/firebase/cases';
+import { getCase, getTimelineEvents, resolveCase, escalateCase } from '@/lib/firebase/cases';
 import type { Case, TimelineEvent } from '@/types';
 
 type TabType = 'chat' | 'timeline' | 'artifacts';
@@ -27,6 +27,7 @@ export default function CaseDetailPage() {
   const [events, setEvents] = useState<TimelineEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Initialize Firebase Auth
   useEffect(() => {
@@ -77,6 +78,47 @@ export default function CaseDetailPage() {
     
     fetchCaseData();
   }, [user?.uid, caseId]);
+
+  // Handle resolve case
+  const handleResolve = async () => {
+    if (!user?.uid || !caseId || !caseData) return;
+    
+    setIsUpdating(true);
+    try {
+      await resolveCase(user.uid, caseId, 'Resolved by support agent');
+      // Update local state
+      setCaseData({ ...caseData, status: 'resolved' });
+      // Refresh timeline
+      const fetchedEvents = await getTimelineEvents(user.uid, caseId);
+      setEvents(fetchedEvents);
+    } catch (err) {
+      console.error('Error resolving case:', err);
+      alert('Failed to resolve case. Please try again.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Handle escalate case
+  const handleEscalate = async (toLevel: 'L2' | 'L3') => {
+    if (!user?.uid || !caseId || !caseData) return;
+    
+    setIsUpdating(true);
+    try {
+      await escalateCase(user.uid, caseId, toLevel, `Escalated to ${toLevel} by support agent`);
+      // Update local state
+      const newStatus = toLevel === 'L2' ? 'escalated_L2' : 'escalated_human';
+      setCaseData({ ...caseData, status: newStatus, currentLevel: toLevel });
+      // Refresh timeline
+      const fetchedEvents = await getTimelineEvents(user.uid, caseId);
+      setEvents(fetchedEvents);
+    } catch (err) {
+      console.error('Error escalating case:', err);
+      alert('Failed to escalate case. Please try again.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   if (error) {
     return (
@@ -164,17 +206,31 @@ export default function CaseDetailPage() {
             {caseData.status !== 'resolved' && (
               <>
                 {caseData.currentLevel === 'L1' && (
-                  <Button size="sm" variant="outline">
-                    Escalate to L2
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleEscalate('L2')}
+                    disabled={isUpdating}
+                  >
+                    {isUpdating ? 'Updating...' : 'Escalate to L2'}
                   </Button>
                 )}
                 {caseData.currentLevel === 'L2' && (
-                  <Button size="sm" variant="outline">
-                    Escalate to Human
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleEscalate('L3')}
+                    disabled={isUpdating}
+                  >
+                    {isUpdating ? 'Updating...' : 'Escalate to Human'}
                   </Button>
                 )}
-                <Button size="sm">
-                  Resolve
+                <Button 
+                  size="sm"
+                  onClick={handleResolve}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? 'Updating...' : 'Resolve'}
                 </Button>
               </>
             )}
