@@ -261,34 +261,57 @@ export async function POST(request: NextRequest) {
               updatedAt: new Date(),
             });
         } else if (aiResponse && !shouldEscalate) {
-          // L1 AI provided a response without escalation - AUTO-RESOLVE
-          await db
-            .collection('tenants')
-            .doc(tenantId)
-            .collection('cases')
-            .doc(caseRef.id)
-            .update({
-              status: 'resolved',
-              summary: 'Resolved by L1 AI',
-              resolvedAt: new Date(),
-              updatedAt: new Date(),
-            });
+          // Check if AI is asking follow-up questions (shouldn't auto-resolve)
+          const isAskingQuestions = /\?\s*(\n|$)/.test(aiResponse) && 
+            (aiResponse.toLowerCase().includes('could you') ||
+             aiResponse.toLowerCase().includes('can you') ||
+             aiResponse.toLowerCase().includes('please confirm') ||
+             aiResponse.toLowerCase().includes('please check') ||
+             aiResponse.toLowerCase().includes('please provide') ||
+             aiResponse.toLowerCase().includes('let me know') ||
+             aiResponse.toLowerCase().includes('i look forward'));
           
-          // Add resolution timeline event
-          await db
-            .collection('tenants')
-            .doc(tenantId)
-            .collection('cases')
-            .doc(caseRef.id)
-            .collection('timeline')
-            .add({
-              type: 'resolved',
-              level: 'L1',
-              content: 'Case auto-resolved after L1 AI response',
-              metadata: {},
-              createdBy: 'system',
-              createdAt: new Date(),
-            });
+          if (isAskingQuestions) {
+            // AI is asking follow-up questions - keep case open, awaiting customer response
+            await db
+              .collection('tenants')
+              .doc(tenantId)
+              .collection('cases')
+              .doc(caseRef.id)
+              .update({
+                status: 'awaiting_customer',
+                updatedAt: new Date(),
+              });
+          } else {
+            // L1 AI provided a solution without follow-up questions - AUTO-RESOLVE
+            await db
+              .collection('tenants')
+              .doc(tenantId)
+              .collection('cases')
+              .doc(caseRef.id)
+              .update({
+                status: 'resolved',
+                summary: 'Resolved by L1 AI',
+                resolvedAt: new Date(),
+                updatedAt: new Date(),
+              });
+            
+            // Add resolution timeline event
+            await db
+              .collection('tenants')
+              .doc(tenantId)
+              .collection('cases')
+              .doc(caseRef.id)
+              .collection('timeline')
+              .add({
+                type: 'resolved',
+                level: 'L1',
+                content: 'Case auto-resolved after L1 AI response',
+                metadata: {},
+                createdBy: 'system',
+                createdAt: new Date(),
+              });
+          }
         }
       } catch (error) {
         console.error('L1 AI processing error:', error);
