@@ -223,8 +223,9 @@ export async function POST(request: NextRequest) {
             createdAt: new Date(),
           });
         
-        // Handle escalation if needed
+        // Handle escalation or auto-resolve
         if (shouldEscalate && escalationLevel === 'L3') {
+          // Escalate to human (L3)
           await db
             .collection('tenants')
             .doc(tenantId)
@@ -248,6 +249,7 @@ export async function POST(request: NextRequest) {
             dashboardUrl: `${baseUrl}/en/dashboard/cases/${caseRef.id}`,
           });
         } else if (shouldEscalate && escalationLevel === 'L2') {
+          // Escalate to L2
           await db
             .collection('tenants')
             .doc(tenantId)
@@ -257,6 +259,35 @@ export async function POST(request: NextRequest) {
               status: 'escalated_L2',
               currentLevel: 'L2',
               updatedAt: new Date(),
+            });
+        } else if (aiResponse && !shouldEscalate) {
+          // L1 AI provided a response without escalation - AUTO-RESOLVE
+          await db
+            .collection('tenants')
+            .doc(tenantId)
+            .collection('cases')
+            .doc(caseRef.id)
+            .update({
+              status: 'resolved',
+              summary: 'Resolved by L1 AI',
+              resolvedAt: new Date(),
+              updatedAt: new Date(),
+            });
+          
+          // Add resolution timeline event
+          await db
+            .collection('tenants')
+            .doc(tenantId)
+            .collection('cases')
+            .doc(caseRef.id)
+            .collection('timeline')
+            .add({
+              type: 'resolved',
+              level: 'L1',
+              content: 'Case auto-resolved after L1 AI response',
+              metadata: {},
+              createdBy: 'system',
+              createdAt: new Date(),
             });
         }
       } catch (error) {
