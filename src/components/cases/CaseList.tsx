@@ -114,13 +114,46 @@ export function CaseList({
         </select>
       </div>
 
+      {/* Active filters indicator */}
+      {Object.values(filters).some(Boolean) && (
+        <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
+          <span>🔍 Filters active:</span>
+          {filters.status && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.status}</span>}
+          {filters.severity && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.severity}</span>}
+          {filters.level && <span className="bg-blue-100 px-2 py-0.5 rounded">{filters.level}</span>}
+          {filters.search && <span className="bg-blue-100 px-2 py-0.5 rounded">"{filters.search}"</span>}
+          <button
+            onClick={() => {
+              const clearedFilters = { status: '', severity: '', level: '', search: '' };
+              setFilters(clearedFilters);
+              onFilterChange?.(clearedFilters);
+            }}
+            className="ml-auto text-blue-600 hover:text-blue-800 underline"
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+
       {/* Cases table */}
       {cases.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
           <span className="text-4xl">📋</span>
           <p className="mt-2">No cases found</p>
           {Object.values(filters).some(Boolean) && (
-            <p className="text-sm mt-1">Try adjusting your filters</p>
+            <p className="text-sm mt-1">
+              No cases match the current filters. 
+              <button
+                onClick={() => {
+                  const clearedFilters = { status: '', severity: '', level: '', search: '' };
+                  setFilters(clearedFilters);
+                  onFilterChange?.(clearedFilters);
+                }}
+                className="text-blue-600 hover:underline ml-1"
+              >
+                Clear filters
+              </button>
+            </p>
           )}
         </div>
       ) : (
