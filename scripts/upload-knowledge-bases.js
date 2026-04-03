@@ -127,8 +127,88 @@ const KNOWLEDGE_BASE_FILES = [
       priority: 'low'
     }
   },
-  // Add 4 more files to reach 13 total
-  // Replace with your actual file paths
+  // TechSupport AI specific KB files
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL1_BASIC_SUPPORT.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_1'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL2_TROUBLESHOOTING.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL3_ESCALATION_GUIDE.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'escalation_guide',
+      support_levels: ['level_3'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  // New targeted KB articles (April 2026)
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\resume-parsing.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\ats-scoring.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\interview-sim.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\salary-data.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'medium'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\factory-wide\\auth.md',
+    metadata: {
+      product: 'NOFA AI Factory',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2', 'level_3'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
 ];
 
 /**
