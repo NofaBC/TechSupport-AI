@@ -13,6 +13,9 @@
  *   - Knowledge base files in knowledge-bases/ directory
  */
 
+// Load environment variables from .env.local
+require('dotenv').config({ path: '.env.local' });
+
 const fs = require('fs');
 const path = require('path');
 const OpenAI = require('openai');
@@ -216,22 +219,35 @@ const KNOWLEDGE_BASE_FILES = [
  */
 function chunkMarkdown(content, chunkSize = CHUNK_SIZE, overlap = OVERLAP) {
   const chunks = [];
-  let start = 0;
 
   // Split by sections (## headings) first for better semantic chunking
   const sections = content.split(/(?=^##\s)/gm);
 
   for (const section of sections) {
-    if (section.length <= chunkSize) {
+    const trimmed = section.trim();
+    if (!trimmed || trimmed.length < 10) continue; // Skip empty or tiny sections
+    
+    if (trimmed.length <= chunkSize) {
       // Section fits in one chunk
-      chunks.push(section.trim());
+      chunks.push(trimmed);
     } else {
       // Split large sections into smaller chunks
-      for (let i = 0; i < section.length; i += chunkSize - overlap) {
-        const chunk = section.slice(i, i + chunkSize);
-        if (chunk.trim()) {
-          chunks.push(chunk.trim());
+      for (let i = 0; i < trimmed.length; i += chunkSize - overlap) {
+        const chunk = trimmed.slice(i, i + chunkSize).trim();
+        if (chunk && chunk.length >= 10) {
+          chunks.push(chunk);
         }
+      }
+    }
+  }
+
+  // If no ## sections found, chunk the whole content
+  if (chunks.length === 0 && content.trim().length > 0) {
+    const trimmed = content.trim();
+    for (let i = 0; i < trimmed.length; i += chunkSize - overlap) {
+      const chunk = trimmed.slice(i, i + chunkSize).trim();
+      if (chunk && chunk.length >= 10) {
+        chunks.push(chunk);
       }
     }
   }
@@ -253,7 +269,7 @@ function extractSectionTitle(chunk) {
 async function generateEmbedding(text) {
   try {
     const response = await openai.embeddings.create({
-      model: 'text-embedding-3-small',
+      model: 'text-embedding-3-large', // 3072 dimensions to match Pinecone index
       input: text.slice(0, 8000), // OpenAI limit
     });
 
@@ -268,11 +284,18 @@ async function generateEmbedding(text) {
  * Upload chunk to Pinecone
  */
 async function uploadToPinecone(index, vectors) {
+  if (!vectors || vectors.length === 0) {
+    console.log('   ⚠️ No vectors to upload, skipping');
+    return;
+  }
+  
   try {
-    await index.upsert(vectors);
-    console.log(`✅ Uploaded ${vectors.length} vectors to Pinecone`);
+    console.log(`   📤 Uploading ${vectors.length} vectors...`);
+    // Pinecone SDK v7 requires { records: [...] } format
+    await index.upsert({ records: vectors });
+    console.log(`   ✅ Uploaded ${vectors.length} vectors to Pinecone`);
   } catch (error) {
-    console.error('Error uploading to Pinecone:', error.message);
+    console.error('   ❌ Error uploading to Pinecone:', error.message);
     throw error;
   }
 }
@@ -291,6 +314,11 @@ async function processKnowledgeBase(fileConfig, index) {
     // Chunk content
     const chunks = chunkMarkdown(content);
     console.log(`   Created ${chunks.length} chunks`);
+    
+    if (chunks.length === 0) {
+      console.log(`   ⚠️ No chunks created, skipping file`);
+      return { success: true, chunks: 0 };
+    }
 
     // Process each chunk
     const vectors = [];
