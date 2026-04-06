@@ -278,3 +278,18 @@ export interface PaginatedResponse<T> {
   limit: number;
   hasMore: boolean;
 }
+
+// ============================================
+// Customer Satisfaction Rating
+// ============================================
+
+export type RatingValue = 1 | 2 | 3 | 4 | 5;
+
+export interface CaseRating {
+  id: string;
+  caseId: string;
+  ticketNumber: string;
+  rating: RatingValue;
+  feedback?: string;
+  createdAt: Timestamp;
+}

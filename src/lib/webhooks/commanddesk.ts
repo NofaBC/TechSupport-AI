@@ -79,8 +79,23 @@ export async function notifyCommandDesk(
 export function generateCustomerResponse(
   ticketNumber: string,
   resolutionSummary: string,
-  product?: string
+  product?: string,
+  caseId?: string
 ): string {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://techsupport.nofabusinessconsulting.com';
+  
+  // Generate rating section if caseId is provided
+  const ratingSection = caseId ? `
+---
+
+How would you rate this support experience?
+
+⭐ Poor  ⭐⭐ Fair  ⭐⭐⭐ Good  ⭐⭐⭐⭐ Great  ⭐⭐⭐⭐⭐ Excellent
+
+Click to rate:
+[1 ⭐](${baseUrl}/api/rate?case=${caseId}&rating=1)  |  [2 ⭐⭐](${baseUrl}/api/rate?case=${caseId}&rating=2)  |  [3 ⭐⭐⭐](${baseUrl}/api/rate?case=${caseId}&rating=3)  |  [4 ⭐⭐⭐⭐](${baseUrl}/api/rate?case=${caseId}&rating=4)  |  [5 ⭐⭐⭐⭐⭐](${baseUrl}/api/rate?case=${caseId}&rating=5)
+` : '';
+
   return `Dear Customer,
 
 Your support case ${ticketNumber} has been resolved.
@@ -90,7 +105,7 @@ ${resolutionSummary}
 If you have any further questions or need additional assistance, please don't hesitate to reply to this email.
 
 Thank you for choosing ${product || 'our services'}.
-
+${ratingSection}
 Best regards,
 NOFA AI Technical Support Team`;
 }

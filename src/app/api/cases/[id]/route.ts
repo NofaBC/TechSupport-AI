@@ -161,7 +161,8 @@ export async function PATCH(
         const customerResponse = generateCustomerResponse(
           currentData.ticketNumber,
           body.resolution || body.notes || 'Your issue has been resolved.',
-          currentData.product
+          currentData.product,
+          id // caseId for rating link
         );
         
         await notifyCommandDesk({

@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
       const customerResponse = generateCustomerResponse(
         caseData.ticketNumber,
         resolution,
-        caseData.product
+        caseData.product,
+        caseId // caseId for rating link
       );
       
       await notifyCommandDesk({
