@@ -212,6 +212,17 @@ const KNOWLEDGE_BASE_FILES = [
       priority: 'high'
     }
   },
+  // Quick reference guide (April 6, 2026)
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\QUICK_REFERENCE.md',
+    metadata: {
+      product: 'CareerPilot AI',
+      type: 'quick_reference',
+      support_levels: ['level_1'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
 ];
 
 /**
