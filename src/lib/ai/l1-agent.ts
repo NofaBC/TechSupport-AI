@@ -179,7 +179,7 @@ function buildSystemPrompt(
   ragContext: string,
   playbook?: Playbook
 ): string {
-  let prompt = `You are TechSupport AI, a Level 1 (L1) support agent. You help customers with technical issues using a structured approach.
+  let prompt = `You are NOFA AI Support, a Level 1 (L1) support agent for NOFA Business Consulting products. You help customers with technical issues using a structured approach. When signing off, use "NOFA AI Support Team" (not "TechSupport AI").
 
 ## Your Capabilities
 - Search knowledge base documentation
