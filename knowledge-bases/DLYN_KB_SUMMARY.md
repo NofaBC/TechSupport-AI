@@ -1,7 +1,7 @@
-# CareerPilot AI Knowledge Base for TechSupport AI
+# Dlyn AI Knowledge Base for TechSupport AI
 
 **Created:** March 22, 2026  
-**Purpose:** Enable TechSupport AI to provide technical support for CareerPilot AI subscribers  
+**Purpose:** Enable TechSupport AI to provide technical support for Dlyn AI subscribers  
 **System:** 3-Tier Escalation (Level 1 AI → Level 2 AI → Level 3 Human via Slack)
 
 ---
@@ -98,7 +98,7 @@
 2. When to Escalate to Level 3 (immediate vs. post-troubleshooting)
 3. Escalation Report Format (for AI to Slack)
 4. Priority Levels (High/Medium/Low with response times)
-5. Slack Channel Configuration (#careerpilot-support-escalations)
+5. Slack Channel Configuration (#Dlyn-support-escalations)
 6. Slack Message Format (examples for each priority)
 7. Response Templates (billing, GDPR, bugs, security)
 8. Issue Resolution Workflow (5-step process)
@@ -196,16 +196,16 @@ From TechSupport-AI/knowledge-bases/:
 ├── LEVEL2_TROUBLESHOOTING.md
 └── LEVEL3_ESCALATION_GUIDE.md
 
-From CareerPilot-AI/ (existing):
-├── CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md
-├── CAREERPILOT_AI_TECHNICAL_KNOWLEDGE_BASE.md
+From Dlyn-AI/ (existing):
+├── Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md
+├── Dlyn_AI_TECHNICAL_KNOWLEDGE_BASE.md
 ├── SUBSCRIPTION_AND_CREDITS_KNOWLEDGE_BASE.md
 ├── KNOWLEDGE_BASE.md
 ├── STRIPE_INTEGRATION_GUIDE.md
 ├── BUG_TRACKING.md
 ├── TESTING_CHECKLIST.md
-├── careerpilot_ecosystem_integration.md
-└── careerpilot_pricing_strategy.md
+├── Dlyn_ecosystem_integration.md
+└── Dlyn_pricing_strategy.md
 ```
 
 **Total:** 12 files (3 new + 9 existing)
@@ -233,15 +233,15 @@ node scripts/upload-knowledge-bases.js
 ### 2. Configure Slack Integration
 
 **Create Slack Channel:**
-- Channel Name: `#careerpilot-support-escalations`
-- Purpose: "Level 3 support escalations for CareerPilot AI"
+- Channel Name: `#Dlyn-support-escalations`
+- Purpose: "Level 3 support escalations for Dlyn AI"
 - Add: Farhad Nasserghodsi
 
 **Setup Webhook:**
 1. Go to https://api.slack.com/apps
 2. Create new app or select existing
 3. Enable Incoming Webhooks
-4. Add webhook to `#careerpilot-support-escalations`
+4. Add webhook to `#Dlyn-support-escalations`
 5. Copy webhook URL
 6. Add to TechSupport AI `.env`:
    ```
@@ -287,7 +287,7 @@ function determineLevel(query: string, context: any) {
 ```typescript
 async function escalateToLevel3(issue: Issue) {
   const slackMessage = {
-    text: `🚨 LEVEL 3 ESCALATION - CareerPilot AI Support`,
+    text: `🚨 LEVEL 3 ESCALATION - Dlyn AI Support`,
     blocks: [
       {
         type: "header",
@@ -328,7 +328,7 @@ async function escalateToLevel3(issue: Issue) {
 
 **Level 1 Test Queries:**
 ```
-"How do I sign up for CareerPilot AI?"
+"How do I sign up for Dlyn AI?"
 "Where do I see my credit balance?"
 "What browsers are supported?"
 "How do I export my resume to PDF?"
@@ -366,7 +366,7 @@ async function escalateToLevel3(issue: Issue) {
 
 **Email:** supportdesk@nofabusinessconsulting.com  
 **Connects To:** TechSupport AI (CommandDesk AI integration)  
-**Escalation Path:** TechSupport AI Level 1 → Level 2 → Slack (#careerpilot-support-escalations)  
+**Escalation Path:** TechSupport AI Level 1 → Level 2 → Slack (#Dlyn-support-escalations)  
 **Human Support:** Farhad Nasserghodsi
 
 ---

@@ -23,7 +23,7 @@ import type { KnowledgeBase } from '@/types';
 
 // NOFA SaaS Products - add more as needed
 const PRODUCTS = [
-  { value: 'careerpilot-ai', label: 'CareerPilot AI' },
+  { value: 'dlyn-ai', label: 'Dlyn AI' },
   { value: 'smartrank-ai', label: 'SmartRank AI' },
   { value: 'recalliq', label: 'RecallIQ™' },
   { value: 'visionwing', label: 'VisionWing™' },
@@ -144,7 +144,7 @@ export function CreateKnowledgeBaseDialog({
               </label>
               <Input
                 id="name"
-                placeholder="e.g., CareerPilot AI Documentation"
+                placeholder="e.g., Dlyn AI Documentation"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={loading}

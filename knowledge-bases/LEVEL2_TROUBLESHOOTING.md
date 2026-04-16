@@ -1,9 +1,9 @@
-# CareerPilot AI™ - Level 2 Troubleshooting Knowledge Base
+# Dlyn AI™ - Level 2 Troubleshooting Knowledge Base
 
 **Support Level:** Level 2 (AI-Advanced)  
 **Target Resolution Time:** 2-5 minutes  
 **Handles:** Complex technical issues requiring diagnosis and multi-step solutions  
-**Product:** CareerPilot AI™  
+**Product:** Dlyn AI™  
 **Version:** 1.0  
 **Last Updated:** March 22, 2026
 
@@ -128,7 +128,7 @@ Use relevant troubleshooting section below
 ```
 1. Sign out completely
 2. Clear browser cache
-3. Close all CareerPilot AI tabs
+3. Close all Dlyn AI tabs
 4. Open fresh browser window
 5. Sign in again
 ```
@@ -400,7 +400,7 @@ If any missing → Complete profile first
 **Step 4: Disable Browser Extensions**
 ```
 1. Open incognito/private mode
-2. Sign in to CareerPilot AI
+2. Sign in to Dlyn AI
 3. Try export again
 4. If it works → Extension was blocking it
 ```
@@ -674,7 +674,7 @@ If any missing → Complete profile first
 - Layout broken
 
 **Current Status:**
-CareerPilot AI is optimized for desktop browsers.
+Dlyn AI is optimized for desktop browsers.
 
 **Mobile Support:**
 - ⚠️ Limited mobile support currently

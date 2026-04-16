@@ -1,6 +1,6 @@
-# CareerPilot AI - Salary Data Guide
+# Dlyn AI - Salary Data Guide
 
-**Product:** CareerPilot AI  
+**Product:** Dlyn AI  
 **Support Level:** Level 1, Level 2  
 **Last Updated:** April 3, 2026
 
@@ -8,13 +8,13 @@
 
 ## Overview
 
-CareerPilot AI provides salary estimates and negotiation guidance based on aggregated market data. This guide explains data sources, coverage, and how to address common questions.
+Dlyn AI provides salary estimates and negotiation guidance based on aggregated market data. This guide explains data sources, coverage, and how to address common questions.
 
 ---
 
 ## Data Sources
 
-CareerPilot salary data is aggregated from multiple reputable sources:
+Dlyn salary data is aggregated from multiple reputable sources:
 
 | Source | Data Type | Update Frequency |
 |--------|-----------|------------------|
@@ -131,7 +131,7 @@ CareerPilot salary data is aggregated from multiple reputable sources:
 
 ### How It Works:
 1. User enters current/target salary and job details
-2. CareerPilot provides market comparison
+2. Dlyn provides market comparison
 3. Generates negotiation talking points
 4. Suggests counter-offer ranges
 
@@ -141,7 +141,7 @@ CareerPilot salary data is aggregated from multiple reputable sources:
 > Most professional salaries have 10-20% negotiation room. Use our talking points to make a data-backed case.
 
 **"Should I share my current salary?"**
-> In many US states, it's illegal for employers to ask. CareerPilot helps you redirect to market-rate discussions instead.
+> In many US states, it's illegal for employers to ask. Dlyn helps you redirect to market-rate discussions instead.
 
 **"The range seems too wide"**
 > Salary ranges reflect market variation. Your position in the range depends on experience, skills, and negotiation.

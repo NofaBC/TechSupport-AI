@@ -4,11 +4,11 @@ This directory contains knowledge base files and upload scripts for TechSupport 
 
 ## 📚 Knowledge Base Files
 
-### CareerPilot AI Support KB (3-Tier System)
+### Dlyn AI Support KB (3-Tier System)
 
 **Created:** March 22, 2026
 
-**Purpose:** Enable TechSupport AI to provide technical support for CareerPilot AI subscribers using a 3-tier escalation system (Level 1 AI → Level 2 AI → Level 3 Human via Slack).
+**Purpose:** Enable TechSupport AI to provide technical support for Dlyn AI subscribers using a 3-tier escalation system (Level 1 AI → Level 2 AI → Level 3 Human via Slack).
 
 #### New KB Files (TechSupport AI Specific):
 
@@ -41,12 +41,12 @@ This directory contains knowledge base files and upload scripts for TechSupport 
 
 ---
 
-### CareerPilot AI General KB (From Main Repo)
+### Dlyn AI General KB (From Main Repo)
 
-Currently configured to upload **9 markdown files** from CareerPilot AI repository:
+Currently configured to upload **9 markdown files** from Dlyn AI repository:
 
 ### High Priority (Level 1-3 Support)
-1. **CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md** ⭐ (v1.1)
+1. **Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md** ⭐ (v1.1)
    - Customer technical support (Level 1, 2, 3)
    - Troubleshooting guides
    - Escalation framework
@@ -57,7 +57,7 @@ Currently configured to upload **9 markdown files** from CareerPilot AI reposito
    - Rollover policies
 
 ### Medium Priority (Level 2-3 Support)
-3. **CAREERPILOT_AI_TECHNICAL_KNOWLEDGE_BASE.md** (v1.0)
+3. **Dlyn_AI_TECHNICAL_KNOWLEDGE_BASE.md** (v1.0)
    - Developer documentation
    - System architecture
    - API reference
@@ -66,7 +66,7 @@ Currently configured to upload **9 markdown files** from CareerPilot AI reposito
    - General product documentation
    - Feature descriptions
 
-5. **careerpilot_ecosystem_integration.md**
+5. **Dlyn_ecosystem_integration.md**
    - NOFA AI Factory integration
    - TechSupport AI integration docs
 
@@ -80,7 +80,7 @@ Currently configured to upload **9 markdown files** from CareerPilot AI reposito
 8. **TESTING_CHECKLIST.md**
    - QA documentation
 
-9. **careerpilot_pricing_strategy.md**
+9. **Dlyn_pricing_strategy.md**
    - Internal pricing strategy
 
 ---
@@ -120,12 +120,12 @@ Total files to process: 13
 
 📊 Connected to Pinecone index: techsupport-knowledge
 
-📄 Processing: CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md
+📄 Processing: Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md
    File size: 95420 characters
    Created 87 chunks
    Processing chunk 1/87: Getting Started
    ...
-✅ Completed: CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md
+✅ Completed: Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md
 
 ...
 
@@ -158,10 +158,10 @@ Total files processed: 13
 Each chunk is uploaded with rich metadata:
 ```javascript
 {
-  id: "careerpilot_ai_1234567890_0",
+  id: "Dlyn_ai_1234567890_0",
   values: [0.123, -0.456, ...], // 1536-dim vector
   metadata: {
-    product: "CareerPilot AI",
+    product: "Dlyn AI",
     type: "technical_support",
     support_levels: ["level_1", "level_2", "level_3"],
     version: "1.1",
@@ -170,7 +170,7 @@ Each chunk is uploaded with rich metadata:
     section: "Getting Started",
     chunk_index: 0,
     total_chunks: 87,
-    file_name: "CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md",
+    file_name: "Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md",
     uploaded_at: "2026-03-12T23:15:00.000Z"
   }
 }
@@ -201,8 +201,8 @@ node scripts/upload-knowledge-bases.js
 // In Pinecone console or via API:
 await index.deleteMany({
   filter: { 
-    product: { $eq: "CareerPilot AI" },
-    file_name: { $eq: "CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md" }
+    product: { $eq: "Dlyn AI" },
+    file_name: { $eq: "Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md" }
   }
 });
 
@@ -238,7 +238,7 @@ const KNOWLEDGE_BASE_FILES = [
 
 | Field | Purpose | Example |
 |-------|---------|---------|
-| `product` | Which product this KB covers | "CareerPilot AI" |
+| `product` | Which product this KB covers | "Dlyn AI" |
 | `type` | Document category | "technical_support", "developer_docs" |
 | `support_levels` | Which levels can use this | ["level_1", "level_2", "level_3"] |
 | `version` | Document version | "1.1" |
@@ -267,7 +267,7 @@ const results = await index.query({
   topK: 5,
   includeMetadata: true,
   filter: {
-    product: { $eq: 'CareerPilot AI' },
+    product: { $eq: 'Dlyn AI' },
     support_levels: { $in: ['level_1'] }, // Level 1 only
     priority: { $in: ['high', 'medium'] }
   }
@@ -339,7 +339,7 @@ Create the index in Pinecone console:
 ### "File not found" error
 Check file paths in `KNOWLEDGE_BASE_FILES` array. Use double backslashes for Windows paths:
 ```javascript
-'C:\\Users\\fnass\\CareerPilot-AI\\file.md'
+'C:\\Users\\fnass\\Dlyn-AI\\file.md'
 ```
 
 ---
@@ -354,16 +354,16 @@ TechSupport-AI/
 │   └── upload-knowledge-bases.js
 └── .env
 
-CareerPilot-AI/
-├── CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md ⭐
-├── CAREERPILOT_AI_TECHNICAL_KNOWLEDGE_BASE.md
+Dlyn-AI/
+├── Dlyn_AI_SUPPORT_KNOWLEDGE_BASE.md ⭐
+├── Dlyn_AI_TECHNICAL_KNOWLEDGE_BASE.md
 ├── SUBSCRIPTION_AND_CREDITS_KNOWLEDGE_BASE.md
 ├── KNOWLEDGE_BASE.md
 ├── STRIPE_INTEGRATION_GUIDE.md
 ├── BUG_TRACKING.md
 ├── TESTING_CHECKLIST.md
-├── careerpilot_ecosystem_integration.md
-└── careerpilot_pricing_strategy.md
+├── Dlyn_ecosystem_integration.md
+└── Dlyn_pricing_strategy.md
 ```
 
 ---

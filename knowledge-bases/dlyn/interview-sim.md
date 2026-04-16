@@ -1,6 +1,6 @@
-# CareerPilot AI - Interview Simulator Troubleshooting
+# Dlyn AI - Interview Simulator Troubleshooting
 
-**Product:** CareerPilot AI  
+**Product:** Dlyn AI  
 **Support Level:** Level 1, Level 2  
 **Last Updated:** April 3, 2026
 
@@ -30,7 +30,7 @@ The Interview Simulator uses your microphone to conduct AI-powered mock intervie
 **Alternative Method:**
 1. Go to Chrome Settings (⋮ → Settings)
 2. Navigate to: Privacy and security → Site Settings → Microphone
-3. Find `careerpilot.ai` in the list
+3. Find `Dlyn.ai` in the list
 4. Change to **Allow**
 
 ---
@@ -53,7 +53,7 @@ The Interview Simulator uses your microphone to conduct AI-powered mock intervie
 1. Click the microphone icon in the address bar (if visible)
 2. Select "Allow" when prompted
 3. Or go to: ☰ → Settings → Privacy & Security → Permissions → Microphone → Settings
-4. Add `https://careerpilot.ai` and set to Allow
+4. Add `https://Dlyn.ai` and set to Allow
 
 ---
 
@@ -67,7 +67,7 @@ The Interview Simulator uses your microphone to conduct AI-powered mock intervie
 1. Go to Safari menu → **Preferences** (or Settings)
 2. Click **Websites** tab
 3. Select **Microphone** in the left sidebar
-4. Find `careerpilot.ai` in the list
+4. Find `Dlyn.ai` in the list
 5. Change to **Allow**
 6. Close Preferences and refresh the page
 
@@ -205,7 +205,7 @@ The Interview Simulator uses your microphone to conduct AI-powered mock intervie
 ## When to Escalate
 
 **Escalate to Level 2 if:**
-- Microphone works in other apps but not CareerPilot
+- Microphone works in other apps but not Dlyn
 - Permissions are correct but still not working
 - Error persists after trying all browser fixes
 
@@ -217,4 +217,4 @@ The Interview Simulator uses your microphone to conduct AI-powered mock intervie
 
 **Related Articles:**
 - `LEVEL2_TROUBLESHOOTING.md` - Section on Interview Coach issues
-- `/kb/careerpilot/resume-parsing.md` - If interview questions aren't tailored
+- `/kb/Dlyn/resume-parsing.md` - If interview questions aren't tailored

@@ -1,6 +1,6 @@
 # NOFA AI Factory - Authentication & Account Management
 
-**Products:** All NOFA AI Products (CareerPilot AI, TechSupport AI, CommandDesk AI, AffiliateLedger AI)  
+**Products:** All NOFA AI Products (Dlyn AI, TechSupport AI, CommandDesk AI, AffiliateLedger AI)  
 **Support Level:** Level 1, Level 2  
 **Last Updated:** April 3, 2026
 

@@ -1,9 +1,9 @@
-# CareerPilot AI™ - Level 1 Basic Support Knowledge Base
+# Dlyn AI™ - Level 1 Basic Support Knowledge Base
 
 **Support Level:** Level 1 (AI-Automated)  
 **Target Resolution Time:** Immediate (< 30 seconds)  
 **Handles:** Simple, straightforward questions with clear solutions  
-**Product:** CareerPilot AI™  
+**Product:** Dlyn AI™  
 **Version:** 1.0  
 **Last Updated:** March 22, 2026
 
@@ -38,7 +38,7 @@
 
 ## Getting Started
 
-### Q: How do I sign up for CareerPilot AI?
+### Q: How do I sign up for Dlyn AI?
 
 **Answer:**
 1. Visit https://career-pilot-ai-gamma.vercel.app/
@@ -81,7 +81,7 @@
 ### Q: What browsers are supported?
 
 **Answer:**
-CareerPilot AI works best on:
+Dlyn AI works best on:
 - ✅ Google Chrome (v90+)
 - ✅ Microsoft Edge (v90+)
 - ✅ Safari (v14+)
@@ -184,10 +184,10 @@ Choose based on your job search intensity:
 
 ## Features & Navigation
 
-### Q: What features does CareerPilot AI have?
+### Q: What features does Dlyn AI have?
 
 **Answer:**
-CareerPilot AI offers 6 main features:
+Dlyn AI offers 6 main features:
 
 1. **🎯 Smart Job Matching**
    - AI-powered skill matching
@@ -286,7 +286,7 @@ After signing up, you'll be prompted to complete your profile:
 ### Q: What countries/regions are supported?
 
 **Answer:**
-CareerPilot AI works globally! 🌍
+Dlyn AI works globally! 🌍
 
 **Best results in English-speaking regions:**
 - 🇺🇸 United States
@@ -363,7 +363,7 @@ Yes! You can edit your profile anytime:
 ### Q: Can I have multiple resumes?
 
 **Answer:**
-Currently, CareerPilot AI stores one resume per account.
+Currently, Dlyn AI stores one resume per account.
 
 **Workaround:**
 - Export to PDF before making major changes
@@ -421,7 +421,7 @@ Fit score (0-100%) shows how well you match a job based on:
 ### Q: How do I apply to jobs?
 
 **Answer:**
-CareerPilot AI helps you apply but doesn't submit applications directly:
+Dlyn AI helps you apply but doesn't submit applications directly:
 
 1. Find a job you like
 2. Click "Smart Apply"

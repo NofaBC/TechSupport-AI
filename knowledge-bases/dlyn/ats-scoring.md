@@ -1,6 +1,6 @@
-# CareerPilot AI - ATS Scoring Guide
+# Dlyn AI - ATS Scoring Guide
 
-**Product:** CareerPilot AI  
+**Product:** Dlyn AI  
 **Support Level:** Level 1, Level 2  
 **Last Updated:** April 3, 2026
 
@@ -10,7 +10,7 @@
 
 ATS (Applicant Tracking System) score measures how well your resume will perform when processed by automated hiring software. Most companies use ATS to filter resumes before human review.
 
-CareerPilot AI analyzes your resume against common ATS requirements and provides a compatibility score from 0-100%.
+Dlyn AI analyzes your resume against common ATS requirements and provides a compatibility score from 0-100%.
 
 ---
 
@@ -56,7 +56,7 @@ Your resume will likely be filtered out by ATS:
 - Image-heavy design
 - Heavily formatted template
 
-**Action:** Consider using CareerPilot's resume builder or a simple template.
+**Action:** Consider using Dlyn's resume builder or a simple template.
 
 ---
 
@@ -136,7 +136,7 @@ Your resume will likely be filtered out by ATS:
 4. Move contact info from header to body
 
 ### Full Optimization (30 minutes):
-1. Use CareerPilot's ATS-friendly resume builder
+1. Use Dlyn's ATS-friendly resume builder
 2. Choose a single-column template
 3. Use standard section headers:
    - Professional Summary
@@ -189,5 +189,5 @@ Yes. Tailoring keywords and content to each job posting improves both ATS scores
 ---
 
 **Related Articles:**
-- `/kb/careerpilot/resume-parsing.md` - Fixing upload and parsing issues
+- `/kb/Dlyn/resume-parsing.md` - Fixing upload and parsing issues
 - `LEVEL1_BASIC_SUPPORT.md` - General resume builder help

@@ -1,6 +1,6 @@
-# CareerPilot AI - Resume Parsing Troubleshooting
+# Dlyn AI - Resume Parsing Troubleshooting
 
-**Product:** CareerPilot AI  
+**Product:** Dlyn AI  
 **Support Level:** Level 1, Level 2  
 **Last Updated:** April 3, 2026
 
@@ -115,5 +115,5 @@
 ---
 
 **Related Articles:**
-- `/kb/careerpilot/ats-scoring.md` - Understanding ATS compatibility scores
+- `/kb/Dlyn/ats-scoring.md` - Understanding ATS compatibility scores
 - `LEVEL2_TROUBLESHOOTING.md` - Advanced troubleshooting workflows

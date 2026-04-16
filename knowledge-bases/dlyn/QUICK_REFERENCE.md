@@ -1,6 +1,6 @@
-# CareerPilot AI - Quick Reference Troubleshooting Guide
+# Dlyn AI - Quick Reference Troubleshooting Guide
 
-**Product:** CareerPilot AI  
+**Product:** Dlyn AI  
 **Support Level:** Level 1  
 **Last Updated:** April 6, 2026
 
@@ -25,7 +25,7 @@
 **Escalate:**
 - If still failing after DOCX conversion
 
-📄 *Full guide: `/kb/careerpilot/resume-parsing.md`*
+📄 *Full guide: `/kb/Dlyn/resume-parsing.md`*
 
 ---
 
@@ -41,7 +41,7 @@
 **Escalate:**
 - If single-column DOCX still fails
 
-📄 *Full guide: `/kb/careerpilot/resume-parsing.md`*
+📄 *Full guide: `/kb/Dlyn/resume-parsing.md`*
 
 ---
 
@@ -56,7 +56,7 @@
 **Escalate:**
 - If OCR version still fails
 
-📄 *Full guide: `/kb/careerpilot/resume-parsing.md`*
+📄 *Full guide: `/kb/Dlyn/resume-parsing.md`*
 
 ---
 
@@ -68,13 +68,13 @@
 **Fix:**
 1. Open Chrome Settings
 2. Go to Privacy & Security → Site Settings → Microphone
-3. Allow access for careerpilot.ai
+3. Allow access for Dlyn.ai
 4. Refresh page
 
 **Escalate:**
 - If microphone still not detected after refresh
 
-📄 *Full guide: `/kb/careerpilot/interview-sim.md`*
+📄 *Full guide: `/kb/Dlyn/interview-sim.md`*
 
 ---
 
@@ -90,7 +90,7 @@
 **Escalate:**
 - If issue persists after permission change
 
-📄 *Full guide: `/kb/careerpilot/interview-sim.md`*
+📄 *Full guide: `/kb/Dlyn/interview-sim.md`*
 
 ---
 
@@ -107,7 +107,7 @@
 **Escalate:**
 - If score does not improve after formatting cleanup
 
-📄 *Full guide: `/kb/careerpilot/ats-scoring.md`*
+📄 *Full guide: `/kb/Dlyn/ats-scoring.md`*
 
 ---
 
@@ -117,7 +117,7 @@
 **Action:**
 - Safe to use for applications
 
-📄 *Full guide: `/kb/careerpilot/ats-scoring.md`*
+📄 *Full guide: `/kb/Dlyn/ats-scoring.md`*
 
 ---
 
@@ -132,7 +132,7 @@
 **Escalate:**
 - If score remains low after rebuild
 
-📄 *Full guide: `/kb/careerpilot/ats-scoring.md`*
+📄 *Full guide: `/kb/Dlyn/ats-scoring.md`*
 
 ---
 
@@ -149,7 +149,7 @@
 **Escalate:**
 - If mismatch exceeds 30% after correction
 
-📄 *Full guide: `/kb/careerpilot/salary-data.md`*
+📄 *Full guide: `/kb/Dlyn/salary-data.md`*
 
 ---
 
@@ -162,7 +162,7 @@
 **Escalate:**
 - If no data returned
 
-📄 *Full guide: `/kb/careerpilot/salary-data.md`*
+📄 *Full guide: `/kb/Dlyn/salary-data.md`*
 
 ---
 
@@ -203,8 +203,8 @@
 ---
 
 **Related Full Articles:**
-- `/kb/careerpilot/resume-parsing.md`
-- `/kb/careerpilot/interview-sim.md`
-- `/kb/careerpilot/ats-scoring.md`
-- `/kb/careerpilot/salary-data.md`
+- `/kb/Dlyn/resume-parsing.md`
+- `/kb/Dlyn/interview-sim.md`
+- `/kb/Dlyn/ats-scoring.md`
+- `/kb/Dlyn/salary-data.md`
 - `/kb/factory-wide/auth.md`

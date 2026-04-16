@@ -1,9 +1,9 @@
-# CareerPilot AI™ - Level 3 Escalation Guide
+# Dlyn AI™ - Level 3 Escalation Guide
 
 **Support Level:** Level 3 (Human Support via Slack)  
 **Target Response Time:** 1-24 hours  
 **Handled By:** Farhad Nasserghodsi (Product Owner)  
-**Product:** CareerPilot AI™  
+**Product:** Dlyn AI™  
 **Version:** 1.0  
 **Last Updated:** March 22, 2026
 
@@ -82,7 +82,7 @@
 When escalating to Level 3 via Slack, AI should provide:
 
 ```
-🚨 LEVEL 3 ESCALATION - CareerPilot AI Support
+🚨 LEVEL 3 ESCALATION - Dlyn AI Support
 
 **PRIORITY:** [🔴 High / 🟡 Medium / 🟢 Low]
 
@@ -190,11 +190,11 @@ Level 2:
 
 ### Recommended Slack Setup
 
-**Channel:** `#careerpilot-support-escalations`
+**Channel:** `#Dlyn-support-escalations`
 
 **Channel Purpose:**
 ```
-Level 3 support escalations for CareerPilot AI.
+Level 3 support escalations for Dlyn AI.
 TechSupport AI posts urgent issues requiring human intervention.
 Monitored by: Farhad Nasserghodsi
 ```
@@ -232,7 +232,7 @@ User attempted to subscribe to Starter plan ($39). Payment failed with error "Ca
 **Evidence:**
 - Stripe error: "Card declined"
 - User screenshot: Shows $39 charge on statement
-- CareerPilot dashboard: Still showing Free plan
+- Dlyn dashboard: Still showing Free plan
 
 **User Expectation:** Response within 1-24 hours
 ```
@@ -309,7 +309,7 @@ User completed resume using current builder but wants ability to:
 
 **Email Response to User:**
 ```
-Subject: CareerPilot AI - Billing Issue Resolved
+Subject: Dlyn AI - Billing Issue Resolved
 
 Hi [Name],
 
@@ -327,7 +327,7 @@ If you have any questions, please don't hesitate to reach out.
 
 Best regards,
 Farhad Nasserghodsi
-CareerPilot AI Support Team
+Dlyn AI Support Team
 supportdesk@nofabusinessconsulting.com
 ```
 
@@ -342,7 +342,7 @@ supportdesk@nofabusinessconsulting.com
 
 **Email Response to User:**
 ```
-Subject: CareerPilot AI - Data Deletion Request Confirmation
+Subject: Dlyn AI - Data Deletion Request Confirmation
 
 Hi [Name],
 
@@ -362,7 +362,7 @@ If you're having issues with the platform and that's why you're deleting, I'm ha
 
 Best regards,
 Farhad Nasserghodsi
-CareerPilot AI Support Team
+Dlyn AI Support Team
 supportdesk@nofabusinessconsulting.com
 ```
 
@@ -378,7 +378,7 @@ supportdesk@nofabusinessconsulting.com
 
 **Email Response to User:**
 ```
-Subject: CareerPilot AI - Bug Report Confirmed
+Subject: Dlyn AI - Bug Report Confirmed
 
 Hi [Name],
 
@@ -398,11 +398,11 @@ As an apology for the inconvenience, I've added [X] credits to your account.
 In the meantime, here's a workaround if you need to use the feature:
 [Workaround steps if available, otherwise "Unfortunately, there's no workaround. The feature will be unavailable until the fix is deployed."]
 
-Thank you for helping us improve CareerPilot AI!
+Thank you for helping us improve Dlyn AI!
 
 Best regards,
 Farhad Nasserghodsi
-CareerPilot AI Support Team
+Dlyn AI Support Team
 supportdesk@nofabusinessconsulting.com
 ```
 
@@ -418,7 +418,7 @@ supportdesk@nofabusinessconsulting.com
 
 **Email Response to User:**
 ```
-Subject: CareerPilot AI - Security Review Complete
+Subject: Dlyn AI - Security Review Complete
 
 Hi [Name],
 
@@ -448,7 +448,7 @@ If you have any concerns, please reply immediately.
 
 Best regards,
 Farhad Nasserghodsi
-CareerPilot AI Support Team
+Dlyn AI Support Team
 supportdesk@nofabusinessconsulting.com
 ```
 
@@ -460,11 +460,11 @@ supportdesk@nofabusinessconsulting.com
 
 Send initial email:
 ```
-Subject: CareerPilot AI - We're investigating your issue
+Subject: Dlyn AI - We're investigating your issue
 
 Hi [Name],
 
-Thank you for contacting CareerPilot AI support. I've received your escalation and I'm personally looking into it.
+Thank you for contacting Dlyn AI support. I've received your escalation and I'm personally looking into it.
 
 **Issue:** [Brief summary]
 **Priority:** [High/Medium/Low]
@@ -474,7 +474,7 @@ I'll update you with findings within [timeframe].
 
 Best regards,
 Farhad Nasserghodsi
-CareerPilot AI Support Team
+Dlyn AI Support Team
 supportdesk@nofabusinessconsulting.com
 ```
 
@@ -595,7 +595,7 @@ For high-priority or complex issues:
 - Monitor and respond to escalations
 
 **Slack:**
-- #careerpilot-support-escalations
+- #Dlyn-support-escalations
 - Receive TechSupport AI escalations
 
 ---

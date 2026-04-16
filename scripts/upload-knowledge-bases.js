@@ -37,188 +37,108 @@ const pinecone = new Pinecone({
 
 /**
  * Knowledge base file metadata
- * Add your 13 files here with appropriate metadata
+ * Updated April 16, 2026: Rebranded CareerPilot AI to Dlyn AI
  */
 const KNOWLEDGE_BASE_FILES = [
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\CAREERPILOT_AI_SUPPORT_KNOWLEDGE_BASE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'technical_support',
-      support_levels: ['level_1', 'level_2', 'level_3'],
-      version: '1.1',
-      priority: 'high'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\CAREERPILOT_AI_TECHNICAL_KNOWLEDGE_BASE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'developer_docs',
-      support_levels: ['level_2', 'level_3'],
-      version: '1.0',
-      priority: 'medium'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\SUBSCRIPTION_AND_CREDITS_KNOWLEDGE_BASE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'pricing_billing',
-      support_levels: ['level_1', 'level_2', 'level_3'],
-      version: '1.1',
-      priority: 'high'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\KNOWLEDGE_BASE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'general_docs',
-      support_levels: ['level_1', 'level_2'],
-      version: '0.9.5',
-      priority: 'medium'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\STRIPE_INTEGRATION_GUIDE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'integration_guide',
-      support_levels: ['level_3'],
-      version: '1.0',
-      priority: 'low'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\BUG_TRACKING.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'bug_tracking',
-      support_levels: ['level_3'],
-      version: '1.0',
-      priority: 'low'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\TESTING_CHECKLIST.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'qa_docs',
-      support_levels: ['level_3'],
-      version: '1.0',
-      priority: 'low'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\careerpilot_ecosystem_integration.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'integration_docs',
-      support_levels: ['level_2', 'level_3'],
-      version: '1.0',
-      priority: 'medium'
-    }
-  },
-  {
-    path: 'C:\\Users\\fnass\\CareerPilot-AI\\careerpilot_pricing_strategy.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'pricing_strategy',
-      support_levels: ['level_3'],
-      version: '1.0',
-      priority: 'low'
-    }
-  },
-  // TechSupport AI specific KB files
+  // TechSupport AI specific KB files (primary source)
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL1_BASIC_SUPPORT.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
       type: 'technical_support',
       support_levels: ['level_1'],
-      version: '1.0',
+      version: '2.0',
       priority: 'high'
     }
   },
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL2_TROUBLESHOOTING.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
       type: 'technical_support',
       support_levels: ['level_2'],
-      version: '1.0',
+      version: '2.0',
       priority: 'high'
     }
   },
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\LEVEL3_ESCALATION_GUIDE.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
       type: 'escalation_guide',
       support_levels: ['level_3'],
-      version: '1.0',
-      priority: 'high'
-    }
-  },
-  // New targeted KB articles (April 2026)
-  {
-    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\resume-parsing.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'technical_support',
-      support_levels: ['level_1', 'level_2'],
-      version: '1.0',
+      version: '2.0',
       priority: 'high'
     }
   },
   {
-    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\ats-scoring.md',
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\DLYN_KB_SUMMARY.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
+      type: 'general_docs',
+      support_levels: ['level_1', 'level_2', 'level_3'],
+      version: '2.0',
+      priority: 'high'
+    }
+  },
+  // Dlyn AI targeted KB articles
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\dlyn\\resume-parsing.md',
+    metadata: {
+      product: 'Dlyn AI',
       type: 'technical_support',
       support_levels: ['level_1', 'level_2'],
-      version: '1.0',
+      version: '2.0',
       priority: 'high'
     }
   },
   {
-    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\interview-sim.md',
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\dlyn\\ats-scoring.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
       type: 'technical_support',
       support_levels: ['level_1', 'level_2'],
-      version: '1.0',
+      version: '2.0',
       priority: 'high'
     }
   },
   {
-    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\salary-data.md',
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\dlyn\\interview-sim.md',
     metadata: {
-      product: 'CareerPilot AI',
+      product: 'Dlyn AI',
       type: 'technical_support',
       support_levels: ['level_1', 'level_2'],
-      version: '1.0',
+      version: '2.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\dlyn\\salary-data.md',
+    metadata: {
+      product: 'Dlyn AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '2.0',
       priority: 'medium'
     }
   },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\dlyn\\QUICK_REFERENCE.md',
+    metadata: {
+      product: 'Dlyn AI',
+      type: 'quick_reference',
+      support_levels: ['level_1'],
+      version: '2.0',
+      priority: 'high'
+    }
+  },
+  // Factory-wide (applies to all NOFA products)
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\factory-wide\\auth.md',
     metadata: {
       product: 'NOFA AI Factory',
       type: 'technical_support',
       support_levels: ['level_1', 'level_2', 'level_3'],
-      version: '1.0',
-      priority: 'high'
-    }
-  },
-  // Quick reference guide (April 6, 2026)
-  {
-    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\careerpilot\\QUICK_REFERENCE.md',
-    metadata: {
-      product: 'CareerPilot AI',
-      type: 'quick_reference',
-      support_levels: ['level_1'],
       version: '1.0',
       priority: 'high'
     }
