@@ -132,6 +132,57 @@ const KNOWLEDGE_BASE_FILES = [
       priority: 'high'
     }
   },
+  // Magazinify AI targeted KB articles
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\magazinify\\QUICK_REFERENCE.md',
+    metadata: {
+      product: 'Magazinify AI',
+      type: 'quick_reference',
+      support_levels: ['level_1'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\magazinify\\magazine-generation.md',
+    metadata: {
+      product: 'Magazinify AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\magazinify\\flipbook-viewer.md',
+    metadata: {
+      product: 'Magazinify AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\magazinify\\billing.md',
+    metadata: {
+      product: 'Magazinify AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\magazinify\\onboarding.md',
+    metadata: {
+      product: 'Magazinify AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
   // Factory-wide (applies to all NOFA products)
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\factory-wide\\auth.md',
