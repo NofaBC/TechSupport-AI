@@ -24,6 +24,7 @@ import type { KnowledgeBase } from '@/types';
 // NOFA SaaS Products - add more as needed
 const PRODUCTS = [
   { value: 'dlyn-ai', label: 'Dlyn AI' },
+  { value: 'intelliscan-ai', label: 'IntelliScan AI™' },
   { value: 'smartrank-ai', label: 'SmartRank AI' },
   { value: 'recalliq', label: 'RecallIQ™' },
   { value: 'visionwing', label: 'VisionWing™' },

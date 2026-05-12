@@ -183,6 +183,47 @@ const KNOWLEDGE_BASE_FILES = [
       priority: 'high'
     }
   },
+  // IntelliScan AI KB articles (May 2026)
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\intelliscan\\QUICK_REFERENCE.md',
+    metadata: {
+      product: 'IntelliScan AI',
+      type: 'quick_reference',
+      support_levels: ['level_1'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\intelliscan\\scanning-issues.md',
+    metadata: {
+      product: 'IntelliScan AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\intelliscan\\reports.md',
+    metadata: {
+      product: 'IntelliScan AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
+  {
+    path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\intelliscan\\subscriptions.md',
+    metadata: {
+      product: 'IntelliScan AI',
+      type: 'technical_support',
+      support_levels: ['level_1', 'level_2'],
+      version: '1.0',
+      priority: 'high'
+    }
+  },
   // Factory-wide (applies to all NOFA products)
   {
     path: 'C:\\Users\\fnass\\TechSupport-AI\\knowledge-bases\\factory-wide\\auth.md',
